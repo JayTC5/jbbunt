@@ -11,358 +11,49 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: Inter, sans-serif; }
-    .font-baseball { font-family: Teko, sans-serif; letter-spacing: .04em; }
-    #field { display:block; width:100%; height:auto; touch-action:manipulation; }
-    .glow { box-shadow: 0 0 45px rgba(34,197,94,.12); }
-    button:focus-visible, input:focus-visible { outline:3px solid #facc15; outline-offset:3px; }
+    *{box-sizing:border-box}body{font-family:Inter,sans-serif}.font-baseball{font-family:Teko,sans-serif;letter-spacing:.04em}#field{display:block;width:100%;height:auto;touch-action:manipulation}.glow{box-shadow:0 0 45px rgba(34,197,94,.12)}button:focus-visible{outline:3px solid #facc15;outline-offset:3px}
   </style>
 </head>
 <body class="min-h-screen bg-[#07130f] text-white">
-  <main class="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
-    <header class="mb-6 flex flex-wrap items-center justify-between gap-4">
-      <a href="./index.html" class="text-sm font-bold text-emerald-300 hover:text-emerald-200"><i class="fa-solid fa-arrow-left mr-2"></i>BACK TO JB BUNT 26</a>
-      <div id="wallet" class="hidden items-center gap-4 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-bold">
-        <span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i><span id="coins">—</span></span>
-        <span class="text-cyan-300"><i class="fa-solid fa-gem mr-1"></i><span id="diamonds">—</span></span>
+<main class="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <a href="./index.html#auth-modal" class="text-sm font-bold text-emerald-300 hover:text-emerald-200"><i class="fa-solid fa-arrow-left mr-2"></i>BACK TO JB BUNT 26</a>
+    <div id="wallet" class="hidden items-center gap-4 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-bold"><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i><span id="coins">—</span></span><span class="text-cyan-300"><i class="fa-solid fa-gem mr-1"></i><span id="diamonds">—</span></span></div>
+  </header>
+  <section class="overflow-hidden rounded-3xl border border-emerald-900/80 bg-slate-900/80 glow">
+    <div class="bg-gradient-to-r from-emerald-950 via-green-900 to-slate-900 px-5 py-7 text-center sm:px-10 sm:py-9"><p class="mb-1 text-xs font-extrabold uppercase tracking-[.35em] text-emerald-300">JB BUNT 26 PRESENTS</p><h1 class="font-baseball text-7xl leading-none text-amber-300 drop-shadow-lg sm:text-8xl">GRAND SLAM</h1><p class="mx-auto mt-2 max-w-xl text-sm text-slate-300">Step up to the plate. Time your swing, launch moonshots, and earn bigger rewards.</p></div>
+    <div id="auth-panel" class="hidden border-b border-amber-500/30 bg-amber-950/30 p-5 sm:p-6"><div class="mx-auto max-w-xl text-center"><h2 class="font-baseball text-3xl text-amber-300"><i class="fa-solid fa-right-to-bracket mr-2"></i>SIGN IN TO JB BUNT 26</h2><p class="my-2 text-sm text-slate-300">Sign in on the main game first. Once signed in, open GRAND SLAM again—the same account session will be recognized here.</p><a href="./index.html#auth-modal" class="inline-block rounded-xl bg-amber-400 px-5 py-3 text-sm font-extrabold text-slate-950 hover:bg-amber-300">GO TO JB BUNT 26 SIGN IN</a></div></div>
+    <div class="grid gap-5 p-4 sm:p-7 lg:grid-cols-[1fr_260px]">
+      <div>
+        <div class="mb-3 flex flex-wrap items-center justify-between gap-3"><div class="flex gap-2"><div class="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Swings left</div><div id="swings" class="font-baseball text-3xl">10</div></div><div class="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Home runs</div><div id="homers" class="font-baseball text-3xl text-amber-300">0</div></div><div class="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Best distance</div><div class="font-baseball text-3xl text-emerald-300"><span id="best">0</span><small class="text-base"> ft</small></div></div></div><div class="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-amber-200/70">Round score</div><div id="score" class="font-baseball text-3xl text-amber-300">0</div></div></div>
+        <div class="overflow-hidden rounded-2xl border border-emerald-900 bg-[#081b14]"><canvas id="field" width="900" height="470" aria-label="Baseball field. Hit when the ball reaches the yellow plate marker."></canvas></div>
+        <div class="mt-3 flex flex-wrap items-center justify-between gap-3"><p id="status" class="min-h-6 text-sm font-bold text-emerald-200" aria-live="polite">Checking your JB BUNT sign-in…</p><div class="flex gap-2"><button id="start-btn" class="rounded-xl bg-emerald-500 px-5 py-3 font-black text-slate-950 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40" disabled>START DERBY</button><button id="swing-btn" class="rounded-xl bg-amber-400 px-6 py-3 font-black text-slate-950 hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-40" disabled><i class="fa-solid fa-baseball-bat-ball mr-2"></i>SWING!</button></div></div>
+        <p class="mt-2 text-center text-xs text-slate-500">Tap SWING or press Space when the ball reaches the plate. Each round has 10 pitches.</p>
       </div>
-    </header>
-
-    <section class="overflow-hidden rounded-3xl border border-emerald-900/80 bg-slate-900/80 glow">
-      <div class="bg-gradient-to-r from-emerald-950 via-green-900 to-slate-900 px-5 py-7 text-center sm:px-10 sm:py-9">
-        <p class="mb-1 text-xs font-extrabold uppercase tracking-[.35em] text-emerald-300">JB BUNT 26 PRESENTS</p>
-        <h1 class="font-baseball text-7xl leading-none text-amber-300 drop-shadow-lg sm:text-8xl">GRAND SLAM</h1>
-        <p class="mx-auto mt-2 max-w-xl text-sm text-slate-300">Step up to the plate. Time your swing, launch moonshots, and earn bigger rewards from your best round.</p>
-      </div>
-
-      <div id="auth-panel" class="hidden border-b border-amber-500/30 bg-amber-950/30 p-5 sm:p-6">
-        <div class="mx-auto max-w-xl">
-          <h2 class="font-baseball text-3xl text-amber-300"><i class="fa-solid fa-right-to-bracket mr-2"></i>SIGN IN TO PLAY</h2>
-          <p class="mb-4 text-xs leading-relaxed text-slate-300">Use your JB BUNT 26 email and password here. Your sign-in is shared with the main game on this same website.</p>
-          <form id="auth-form" class="grid gap-3 sm:grid-cols-2">
-            <input id="auth-email" type="email" autocomplete="email" required placeholder="Email address" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 sm:col-span-2">
-            <input id="auth-password" type="password" autocomplete="current-password" required minlength="6" placeholder="Password (6+ characters)" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 sm:col-span-2">
-            <button type="submit" id="login-btn" class="rounded-lg bg-amber-400 px-4 py-2.5 text-sm font-extrabold text-slate-950 hover:bg-amber-300">Sign In</button>
-            <button type="button" id="signup-btn" class="rounded-lg border border-slate-600 bg-slate-800 px-4 py-2.5 text-sm font-extrabold text-white hover:bg-slate-700">Create Account</button>
-          </form>
-          <p id="auth-message" class="mt-3 min-h-5 text-xs text-amber-200" aria-live="polite"></p>
-          <p class="text-[10px] text-slate-500">If you are new, you can also create your account from the main game first, then return here.</p>
-        </div>
-      </div>
-
-      <div class="grid gap-5 p-4 sm:p-7 lg:grid-cols-[1fr_260px]">
-        <div>
-          <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
-            <div class="flex gap-2">
-              <div class="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Swings left</div><div id="swings" class="font-baseball text-3xl text-white">10</div></div>
-              <div class="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Home runs</div><div id="homers" class="font-baseball text-3xl text-amber-300">0</div></div>
-              <div class="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Best distance</div><div class="font-baseball text-3xl text-emerald-300"><span id="best">0</span><small class="text-base"> ft</small></div></div>
-            </div>
-            <div class="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-center"><div class="text-[10px] font-bold uppercase tracking-widest text-amber-200/70">Round score</div><div id="score" class="font-baseball text-3xl text-amber-300">0</div></div>
-          </div>
-
-          <div class="overflow-hidden rounded-2xl border border-emerald-900 bg-[#081b14]">
-            <canvas id="field" width="900" height="470" aria-label="Baseball field. Hit when the pitch reaches the yellow plate marker."></canvas>
-          </div>
-          <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
-            <p id="status" class="min-h-6 text-sm font-bold text-emerald-200" aria-live="polite">Sign in to JB BUNT 26 to start your derby.</p>
-            <button id="swing-btn" class="rounded-xl bg-amber-400 px-8 py-3 font-black text-slate-950 shadow-lg transition hover:bg-amber-300 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40" disabled><i class="fa-solid fa-baseball-bat-ball mr-2"></i>SWING!</button>
-          </div>
-          <p class="mt-2 text-center text-xs text-slate-500">Tap SWING or press Space when the ball reaches the plate. A round has 10 pitches.</p>
-        </div>
-
-        <aside class="space-y-4">
-          <div class="rounded-2xl border border-slate-700 bg-slate-950 p-4">
-            <h2 class="font-baseball text-3xl text-amber-300"><i class="fa-solid fa-trophy mr-2"></i>REWARD BOARD</h2>
-            <p class="mb-3 text-xs text-slate-400">Big rewards for your final score. One reward claim per UTC day.</p>
-            <div class="space-y-2 text-xs">
-              <div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>200–499</span><b class="text-amber-300">5,000 coins</b></div>
-              <div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>500–799</span><b class="text-amber-300">25,000 coins</b></div>
-              <div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>800+</span><b class="text-cyan-300">100,000 coins + 100 diamonds</b></div>
-              <div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>Below 200</span><b class="text-slate-400">Keep practicing!</b></div>
-            </div>
-          </div>
-          <div class="rounded-2xl border border-slate-700 bg-slate-950 p-4">
-            <h2 class="font-baseball text-3xl text-emerald-300"><i class="fa-solid fa-circle-info mr-2"></i>HOW TO PLAY</h2>
-            <ol class="ml-4 list-decimal space-y-2 text-xs leading-relaxed text-slate-300">
-              <li>Sign in with your JB BUNT 26 account above.</li>
-              <li>Start the derby and watch the pitch travel toward home plate.</li>
-              <li>Time your swing as it reaches the yellow strike zone.</li>
-              <li>Perfect timing sends it over the fence. Your final score sets your reward tier.</li>
-            </ol>
-          </div>
-        </aside>
-      </div>
-
-      <div id="result" class="hidden border-t border-slate-700 bg-slate-950/80 p-6 text-center">
-        <div id="result-icon" class="mb-2 text-4xl text-amber-300"><i class="fa-solid fa-trophy"></i></div>
-        <h2 id="result-title" class="font-baseball text-5xl text-amber-300">DERBY COMPLETE</h2>
-        <p id="result-copy" class="mt-1 text-sm text-slate-300"></p>
-        <button id="play-again" class="mt-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 px-6 py-2 text-sm font-extrabold text-emerald-200 transition hover:bg-emerald-500/20">PLAY AGAIN</button>
-      </div>
-    </section>
-    <p class="mx-auto mt-4 max-w-3xl text-center text-[10px] leading-relaxed text-slate-600">Heads up: score and reward checks currently run in the browser, so technically advanced players could manipulate them. For secure competitive rewards, score validation and reward grants should run in a trusted server / Firebase Cloud Function.</p>
-  </main>
-
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-    import { getFirestore, doc, getDoc, setDoc, onSnapshot, runTransaction } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-
-    const app = initializeApp({
-      apiKey: 'AIzaSyAAkxFfbjR_4Q-DLlBWK7yA7ybfW8Pl8U',
-      authDomain: 'jbbunt26.firebaseapp.com',
-      projectId: 'jbbunt26',
-      storageBucket: 'jbbunt26.firebasestorage.app',
-      messagingSenderId: '583905105072',
-      appId: '1:583905105072:web:c5f0826de9af9735f49775',
-      measurementId: 'G-50E9CWKP7G'
-    });
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const canvas = document.getElementById('field');
-    const ctx = canvas.getContext('2d');
-    const $ = id => document.getElementById(id);
-    let currentUser = null;
-    let gameActive = false;
-    let pitchActive = false;
-    let pitchStart = 0;
-    let pitchDuration = 2000;
-    let pitchNumber = 0;
-    let score = 0;
-    let homers = 0;
-    let bestDistance = 0;
-    let raf = 0;
-    let pitchTimer = 0;
-    let resultPosted = false;
-
-    function setStatus(message, bad = false) {
-      $('status').textContent = message;
-      $('status').className = `min-h-6 text-sm font-bold ${bad ? 'text-rose-300' : 'text-emerald-200'}`;
-    }
-
-    function drawField(now = performance.now()) {
-      const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-      const sky = ctx.createLinearGradient(0, 0, 0, h * .55);
-      sky.addColorStop(0, '#102c40'); sky.addColorStop(1, '#1e4b45');
-      ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 16px Inter, sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('GRAND SLAM PARK', w / 2, 34);
-      ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(450, 395); ctx.lineTo(115, 115); ctx.moveTo(450, 395); ctx.lineTo(785, 115); ctx.stroke();
-      ctx.fillStyle = '#155e35'; ctx.beginPath(); ctx.moveTo(450, 395); ctx.lineTo(115, 115); ctx.quadraticCurveTo(450, 35, 785, 115); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#246b40'; ctx.beginPath(); ctx.moveTo(450, 395); ctx.lineTo(285, 230); ctx.lineTo(450, 155); ctx.lineTo(615, 230); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#b87946'; ctx.beginPath(); ctx.moveTo(450, 380); ctx.lineTo(390, 320); ctx.lineTo(450, 260); ctx.lineTo(510, 320); ctx.closePath(); ctx.fill();
-      for (const [x, y] of [[450,260],[390,320],[510,320],[450,380]]) { ctx.fillStyle = '#fff7ed'; ctx.fillRect(x - 5, y - 5, 10, 10); }
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(440, 402); ctx.lineTo(460, 402); ctx.lineTo(460, 412); ctx.lineTo(450, 418); ctx.lineTo(440, 412); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = '#facc15'; ctx.lineWidth = 3; ctx.strokeRect(408, 295, 84, 95);
-      ctx.fillStyle = '#f8fafc'; ctx.beginPath(); ctx.arc(510, 365, 10, 0, Math.PI * 2); ctx.fill();
-      ctx.fillRect(502, 375, 17, 35); ctx.strokeStyle = '#d6a56d'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(512, 383); ctx.lineTo(535, 358); ctx.lineTo(543, 336); ctx.stroke();
-      if (pitchActive) {
-        const progress = Math.min(1, (now - pitchStart) / pitchDuration);
-        const x = 70 + progress * 365;
-        const y = 190 + Math.sin(progress * Math.PI) * 112;
-        ctx.shadowColor = '#fff'; ctx.shadowBlur = 12; ctx.fillStyle = '#fff';
-        ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-        ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 18, y - 5); ctx.lineTo(x - 4, y - 2); ctx.stroke();
-      }
-      if (gameActive && pitchActive && now - pitchStart >= pitchDuration) resolveSwing(null);
-      if (gameActive) raf = requestAnimationFrame(drawField);
-    }
-
-    function updateStats() {
-      $('score').textContent = score;
-      $('homers').textContent = homers;
-      $('best').textContent = bestDistance;
-      $('swings').textContent = Math.max(0, 10 - pitchNumber);
-    }
-
-    function startDerby() {
-      if (!currentUser) {
-        $('auth-panel').classList.remove('hidden');
-        setStatus('Sign in above to play and earn rewards.', true);
-        $('auth-email').focus();
-        return;
-      }
-      cancelAnimationFrame(raf);
-      clearTimeout(pitchTimer);
-      gameActive = true; pitchActive = false; pitchNumber = 0; score = 0; homers = 0; bestDistance = 0; resultPosted = false;
-      $('result').classList.add('hidden'); $('swing-btn').disabled = false;
-      setStatus('Pitch 1 of 10 — get ready!'); updateStats();
-      drawField(); schedulePitch();
-    }
-
-    function schedulePitch() {
-      if (!gameActive) return;
-      if (pitchNumber >= 10) { finishDerby(); return; }
-      pitchActive = false;
-      setStatus(`Pitch ${pitchNumber + 1} of 10 — here it comes!`);
-      pitchTimer = window.setTimeout(() => {
-        if (!gameActive) return;
-        pitchDuration = 1700 + Math.random() * 800;
-        pitchStart = performance.now(); pitchActive = true;
-        setStatus(`Pitch ${pitchNumber + 1} — time your swing!`);
-      }, 700);
-    }
-
-    function swing() {
-      if (!gameActive || !pitchActive) return;
-      const progress = Math.min(1, (performance.now() - pitchStart) / pitchDuration);
-      const accuracy = Math.max(0, 1 - Math.abs(progress - .83) / .22);
-      resolveSwing(accuracy);
-    }
-
-    function resolveSwing(accuracy) {
-      if (!gameActive || !pitchActive) return;
-      pitchActive = false;
-      pitchNumber++;
-      if (accuracy === null || accuracy < .16) {
-        setStatus(accuracy === null ? 'Strike! The pitch got by you.' : 'Swing and a miss! Keep your eye on it.', true);
-      } else {
-        const distance = Math.round(220 + accuracy * 250 + Math.random() * 65);
-        bestDistance = Math.max(bestDistance, distance);
-        if (accuracy >= .57) {
-          homers++;
-          score += Math.round(distance / 3);
-          setStatus(`HOME RUN! ${distance} ft — ${accuracy > .88 ? 'perfect contact!' : 'gone!'}`);
-        } else {
-          score += Math.round(accuracy * 35);
-          setStatus(`Solid contact — ${distance} ft, but it stays in the park.`);
-        }
-      }
-      updateStats();
-      pitchTimer = window.setTimeout(() => {
-        if (!gameActive) return;
-        if (pitchNumber >= 10) finishDerby(); else schedulePitch();
-      }, 1200);
-    }
-
-    function rewardFor(finalScore) {
-      if (finalScore >= 800) return { coins: 100000, diamonds: 100 };
-      if (finalScore >= 500) return { coins: 25000, diamonds: 0 };
-      if (finalScore >= 200) return { coins: 5000, diamonds: 0 };
-      return { coins: 0, diamonds: 0 };
-    }
-
-    async function finishDerby() {
-      if (!gameActive) return;
-      gameActive = false; pitchActive = false; cancelAnimationFrame(raf); clearTimeout(pitchTimer); $('swing-btn').disabled = true;
-      setStatus('Derby complete! Checking your score…');
-      $('result').classList.remove('hidden');
-      $('result-title').textContent = 'DERBY COMPLETE';
-      $('result-copy').textContent = `${score} points · ${homers} home run${homers === 1 ? '' : 's'} · best hit ${bestDistance} ft`;
-      const reward = rewardFor(score);
-      if (!currentUser || resultPosted) return;
-      resultPosted = true;
-      if (!reward.coins) {
-        $('result-copy').textContent += ' — Score 200+ to earn a reward. Play again and try for a bigger hit!';
-        return;
-      }
-      try {
-        const userRef = doc(db, 'users', currentUser.uid);
-        let outcome = 'claimed';
-        const today = new Date().toISOString().slice(0, 10);
-        await runTransaction(db, async transaction => {
-          const snap = await transaction.get(userRef);
-          if (!snap.exists()) throw new Error('Player profile not found. Return to the main game and sign in again.');
-          const data = snap.data();
-          if (data.grandSlamRewardDate === today) { outcome = 'already'; return; }
-          transaction.update(userRef, {
-            coins: (Number(data.coins) || 0) + reward.coins,
-            diamonds: (Number(data.diamonds) || 0) + reward.diamonds,
-            grandSlamRewardDate: today,
-            grandSlamBestScore: Math.max(Number(data.grandSlamBestScore) || 0, score)
-          });
-        });
-        if (outcome === 'already') {
-          $('result-copy').textContent += ' — You already claimed today’s GRAND SLAM reward. Come back tomorrow!';
-          setStatus('Daily reward already claimed.', true);
-        } else {
-          $('result-copy').textContent += ` — Reward claimed: ${reward.coins.toLocaleString()} coins${reward.diamonds ? ` + ${reward.diamonds} diamonds` : ''}!`;
-          $('result-icon').innerHTML = '<i class="fa-solid fa-gift"></i>';
-          setStatus('Reward added to your JB BUNT 26 account!');
-        }
-      } catch (error) {
-        console.error('GRAND SLAM reward could not be saved:', error);
-        $('result-copy').textContent += ' — Could not save your reward. Please check your connection and Firebase permissions.';
-        setStatus('Reward could not be saved. Check your connection and Firebase permissions.', true);
-      }
-    }
-
-    async function ensurePlayerProfile(user) {
-      const userRef = doc(db, 'users', user.uid);
-      const snap = await getDoc(userRef);
-      if (!snap.exists()) {
-        const username = (user.email || 'player').split('@')[0];
-        await setDoc(userRef, {
-          email: user.email || '', username, username_lowercase: username.toLowerCase(),
-          coins: 1000, diamonds: 200, collection: [1, 2, 3], missions: {}, eventProgress: {},
-          redeemedCodes: [], following: [], lastCoinClaim: Date.now(), lastDailyDiamondClaim: 0,
-          lastMissionReset: Date.now(), lastWheelSpin: 0
-        }, { merge: true });
-      }
-    }
-
-    $('auth-form').addEventListener('submit', async event => {
-      event.preventDefault();
-      $('auth-message').textContent = 'Signing in…';
-      try {
-        await signInWithEmailAndPassword(auth, $('auth-email').value.trim(), $('auth-password').value);
-        $('auth-message').textContent = 'Signed in! Start your derby.';
-      } catch (error) {
-        console.error(error);
-        $('auth-message').textContent = error.code === 'auth/invalid-credential' ? 'Email or password is incorrect. If you are new, use Create Account.' : (error.message || 'Sign in failed.');
-      }
-    });
-
-    $('signup-btn').addEventListener('click', async () => {
-      $('auth-message').textContent = 'Creating your account…';
-      try {
-        const credential = await createUserWithEmailAndPassword(auth, $('auth-email').value.trim(), $('auth-password').value);
-        await ensurePlayerProfile(credential.user);
-        $('auth-message').textContent = 'Account created! You can start your derby.';
-      } catch (error) {
-        console.error(error);
-        $('auth-message').textContent = error.code === 'auth/email-already-in-use' ? 'That email already has an account. Sign in instead.' : (error.message || 'Account creation failed.');
-      }
-    });
-
-    $('swing-btn').addEventListener('click', swing);
-    $('play-again').addEventListener('click', startDerby);
-    window.addEventListener('keydown', event => {
-      if (event.code === 'Space' && !event.repeat) {
-        event.preventDefault();
-        if (!gameActive) startDerby(); else swing();
-      }
-    });
-
-    onAuthStateChanged(auth, async user => {
-      currentUser = user;
-      $('auth-panel').classList.toggle('hidden', Boolean(user));
-      $('wallet').classList.toggle('hidden', !user);
-      $('wallet').classList.toggle('flex', Boolean(user));
-      $('swing-btn').disabled = !user || !gameActive;
-      if (!user) {
-        setStatus('Sign in to JB BUNT 26 above to play for rewards.', true);
-        drawField();
-        return;
-      }
-      try {
-        await ensurePlayerProfile(user);
-        onSnapshot(doc(db, 'users', user.uid), snap => {
-          if (!snap.exists()) return;
-          $('coins').textContent = (snap.data().coins ?? 0).toLocaleString();
-          $('diamonds').textContent = (snap.data().diamonds ?? 0).toLocaleString();
-        });
-        setStatus('You’re signed in. Press Space or start a derby to play.');
-      } catch (error) {
-        console.error('Could not load player profile:', error);
-        setStatus('Signed in, but your player profile could not load. Check Firebase permissions.', true);
-      }
-      drawField();
-    });
-  </script>
+      <aside class="space-y-4"><div class="rounded-2xl border border-slate-700 bg-slate-950 p-4"><h2 class="font-baseball text-3xl text-amber-300"><i class="fa-solid fa-trophy mr-2"></i>REWARD BOARD</h2><p class="mb-3 text-xs text-slate-400">One reward claim per UTC day.</p><div class="space-y-2 text-xs"><div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>200–499</span><b class="text-amber-300">5,000 coins</b></div><div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>500–799</span><b class="text-amber-300">25,000 coins</b></div><div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>800+</span><b class="text-cyan-300">100,000 coins + 100 diamonds</b></div><div class="flex justify-between rounded-lg bg-slate-900 p-2"><span>Below 200</span><b class="text-slate-400">Practice!</b></div></div></div><div class="rounded-2xl border border-slate-700 bg-slate-950 p-4"><h2 class="font-baseball text-3xl text-emerald-300"><i class="fa-solid fa-circle-info mr-2"></i>HOW TO PLAY</h2><ol class="ml-4 list-decimal space-y-2 text-xs leading-relaxed text-slate-300"><li>Sign in on JB BUNT 26, then return here.</li><li>Start the derby and watch the pitch.</li><li>Time your swing as it reaches the yellow zone.</li><li>Your final score sets your reward tier.</li></ol></div></aside>
+    </div>
+    <div id="result" class="hidden border-t border-slate-700 bg-slate-950/80 p-6 text-center"><div id="result-icon" class="mb-2 text-4xl text-amber-300"><i class="fa-solid fa-trophy"></i></div><h2 class="font-baseball text-5xl text-amber-300">DERBY COMPLETE</h2><p id="result-copy" class="mt-1 text-sm text-slate-300"></p><button id="play-again" class="mt-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 px-6 py-2 text-sm font-extrabold text-emerald-200">PLAY AGAIN</button></div>
+  </section>
+  <p class="mx-auto mt-4 max-w-3xl text-center text-[10px] leading-relaxed text-slate-600">Rewards are currently processed by browser-side code and are not cheat-proof. Secure score validation should run on a trusted server.</p>
+</main>
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import {getAuth,onAuthStateChanged,browserLocalPersistence,setPersistence} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import {getFirestore,doc,onSnapshot,runTransaction} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+const app=initializeApp({apiKey:'AIzaSyAAkxFfbjR_4Q-DLlBWK7yA7ybfW8Pl8U',authDomain:'jbbunt26.firebaseapp.com',projectId:'jbbunt26',storageBucket:'jbbunt26.firebasestorage.app',messagingSenderId:'583905105072',appId:'1:583905105072:web:c5f0826de9af9735f49775',measurementId:'G-50E9CWKP7G'});
+const auth=getAuth(app),db=getFirestore(app),canvas=document.getElementById('field'),ctx=canvas.getContext('2d'),$=id=>document.getElementById(id);
+let currentUser=null,gameActive=false,pitchActive=false,pitchStart=0,pitchDuration=2000,pitchNumber=0,score=0,homers=0,bestDistance=0,raf=0,pitchTimer=0,resultPosted=false;
+function status(text,bad=false){$('status').textContent=text;$('status').className=`min-h-6 text-sm font-bold ${bad?'text-rose-300':'text-emerald-200'}`}
+function draw(now=performance.now()){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);const sky=ctx.createLinearGradient(0,0,0,h*.55);sky.addColorStop(0,'#102c40');sky.addColorStop(1,'#1e4b45');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);ctx.fillStyle='#e2e8f0';ctx.font='bold 16px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('GRAND SLAM PARK',450,34);ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(450,395);ctx.lineTo(115,115);ctx.moveTo(450,395);ctx.lineTo(785,115);ctx.stroke();ctx.fillStyle='#155e35';ctx.beginPath();ctx.moveTo(450,395);ctx.lineTo(115,115);ctx.quadraticCurveTo(450,35,785,115);ctx.closePath();ctx.fill();ctx.fillStyle='#246b40';ctx.beginPath();ctx.moveTo(450,395);ctx.lineTo(285,230);ctx.lineTo(450,155);ctx.lineTo(615,230);ctx.closePath();ctx.fill();ctx.fillStyle='#b87946';ctx.beginPath();ctx.moveTo(450,380);ctx.lineTo(390,320);ctx.lineTo(450,260);ctx.lineTo(510,320);ctx.closePath();ctx.fill();for(const [x,y] of [[450,260],[390,320],[510,320],[450,380]]){ctx.fillStyle='#fff7ed';ctx.fillRect(x-5,y-5,10,10)}ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(440,402);ctx.lineTo(460,402);ctx.lineTo(460,412);ctx.lineTo(450,418);ctx.lineTo(440,412);ctx.closePath();ctx.fill();ctx.strokeStyle='#facc15';ctx.lineWidth=3;ctx.strokeRect(408,295,84,95);ctx.fillStyle='#f8fafc';ctx.beginPath();ctx.arc(510,365,10,0,Math.PI*2);ctx.fill();ctx.fillRect(502,375,17,35);ctx.strokeStyle='#d6a56d';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(512,383);ctx.lineTo(535,358);ctx.lineTo(543,336);ctx.stroke();if(pitchActive){const p=Math.min(1,(now-pitchStart)/pitchDuration),x=70+p*365,y=190+Math.sin(p*Math.PI)*112;ctx.shadowColor='#fff';ctx.shadowBlur=12;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}if(gameActive&&pitchActive&&now-pitchStart>=pitchDuration)resolve(null);if(gameActive)raf=requestAnimationFrame(draw)}
+function stats(){$('score').textContent=score;$('homers').textContent=homers;$('best').textContent=bestDistance;$('swings').textContent=Math.max(0,10-pitchNumber)}
+function start(){if(!currentUser){$('auth-panel').classList.remove('hidden');status('Sign in on the main game, then return here.',true);return}cancelAnimationFrame(raf);clearTimeout(pitchTimer);gameActive=true;pitchActive=false;pitchNumber=score=homers=bestDistance=0;resultPosted=false;$('result').classList.add('hidden');$('start-btn').disabled=true;$('swing-btn').disabled=false;stats();status('Pitch 1 of 10 — get ready!');draw();nextPitch()}
+function nextPitch(){if(!gameActive)return;if(pitchNumber>=10){finish();return}pitchActive=false;status(`Pitch ${pitchNumber+1} of 10 — here it comes!`);pitchTimer=setTimeout(()=>{if(!gameActive)return;pitchDuration=1700+Math.random()*800;pitchStart=performance.now();pitchActive=true;status(`Pitch ${pitchNumber+1} — time your swing!`)},700)}
+function swing(){if(!gameActive||!pitchActive)return;const p=Math.min(1,(performance.now()-pitchStart)/pitchDuration);resolve(Math.max(0,1-Math.abs(p-.83)/.22))}
+function resolve(acc){if(!gameActive||!pitchActive)return;pitchActive=false;pitchNumber++;if(acc===null||acc<.16){status(acc===null?'Strike! The pitch got by you.':'Swing and a miss!',true)}else{const d=Math.round(220+acc*250+Math.random()*65);bestDistance=Math.max(bestDistance,d);if(acc>=.57){homers++;score+=Math.round(d/3);status(`HOME RUN! ${d} ft — ${acc>.88?'perfect contact!':'gone!'}`)}else{score+=Math.round(acc*35);status(`Solid contact — ${d} ft, but it stays in the park.`)}}stats();pitchTimer=setTimeout(()=>{if(gameActive){if(pitchNumber>=10)finish();else nextPitch()}},1200)}
+function prize(s){if(s>=800)return{coins:100000,diamonds:100};if(s>=500)return{coins:25000,diamonds:0};if(s>=200)return{coins:5000,diamonds:0};return{coins:0,diamonds:0}}
+async function finish(){if(!gameActive)return;gameActive=false;pitchActive=false;cancelAnimationFrame(raf);clearTimeout(pitchTimer);$('swing-btn').disabled=true;$('start-btn').disabled=!currentUser;status('Derby complete! Checking your score…');$('result').classList.remove('hidden');$('result-copy').textContent=`${score} points · ${homers} home runs · best hit ${bestDistance} ft`;const reward=prize(score);if(!currentUser||resultPosted)return;resultPosted=true;if(!reward.coins){$('result-copy').textContent+=' — Score 200+ to earn a reward.';return}try{let outcome='claimed';const today=new Date().toISOString().slice(0,10),ref=doc(db,'users',currentUser.uid);await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw Error('Player profile not found. Sign into the main game first.');const data=snap.data();if(data.grandSlamRewardDate===today){outcome='already';return}tx.update(ref,{coins:(Number(data.coins)||0)+reward.coins,diamonds:(Number(data.diamonds)||0)+reward.diamonds,grandSlamRewardDate:today,grandSlamBestScore:Math.max(Number(data.grandSlamBestScore)||0,score)})});if(outcome==='already'){ $('result-copy').textContent+=' — You already claimed today. Come back tomorrow!';status('Daily reward already claimed.',true)}else{$('result-copy').textContent+=` — Reward: ${reward.coins.toLocaleString()} coins${reward.diamonds?` + ${reward.diamonds} diamonds`:''}!`;status('Reward added to your account!')}}catch(e){console.error(e);$('result-copy').textContent+=' — Reward could not be saved. Check connection and Firebase permissions.';status('Reward could not be saved.',true)}}
+$('start-btn').addEventListener('click',start);$('swing-btn').addEventListener('click',swing);$('play-again').addEventListener('click',start);window.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat){e.preventDefault();if(!gameActive)start();else swing()}});
+setPersistence(auth,browserLocalPersistence).then(()=>onAuthStateChanged(auth,user=>{currentUser=user;$('auth-panel').classList.toggle('hidden',Boolean(user));$('wallet').classList.toggle('hidden',!user);$('wallet').classList.toggle('flex',Boolean(user));$('start-btn').disabled=!user;$('swing-btn').disabled=true;if(!user){status('Sign in on JB BUNT 26 to play for rewards.',true);draw();return}onSnapshot(doc(db,'users',user.uid),snap=>{if(snap.exists()){$('coins').textContent=(snap.data().coins??0).toLocaleString();$('diamonds').textContent=(snap.data().diamonds??0).toLocaleString()}});status('Signed in! Start your derby.');draw()})).catch(error=>{console.error('Firebase sign-in persistence error:',error);status('Could not connect to Firebase. Please reload.',true)});
+</script>
 </body>
 </html>
