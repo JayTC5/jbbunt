@@ -96,6 +96,10 @@
       background: linear-gradient(135deg, #7e22ce 0%, #4c1d95 50%, #1e1b4b 100%);
       box-shadow: 0 0 35px rgba(168, 85, 247, 0.5);
     }
+    .pack-foil-apex {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 40%, #fbbf24 100%);
+      box-shadow: 0 0 35px rgba(251, 191, 36, 0.55);
+    }
     .pack-foil-legacy {
       background: linear-gradient(135deg, #92400e 0%, #1c1917 50%, #fbbf24 100%);
       box-shadow: 0 0 35px rgba(251, 191, 36, 0.4);
@@ -329,6 +333,37 @@
       <button id="spin-wheel-btn" onclick="spinPrizeWheel()" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-extrabold py-3 rounded-xl text-base shadow-lg transition transform hover:scale-105">
         SPIN NOW!
       </button>
+    </div>
+  </div>
+
+  <!-- GRAND SLAM MODAL -->
+  <div id="grandslam-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-3">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 shadow-2xl w-full max-w-md flex flex-col items-center relative">
+      <button onclick="closeGrandSlam()" class="absolute top-3 right-3 text-slate-400 hover:text-white text-2xl z-10"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="font-baseball text-4xl text-emerald-400 tracking-wide"><i class="fa-solid fa-baseball-bat-ball mr-2"></i>Grand Slam</h2>
+      <p class="text-[11px] text-slate-400 mb-2 text-center">Tap to throw. Desktop: click to swing. Mobile: hold, then let go to swing.</p>
+      <div class="flex gap-3 text-xs font-bold mb-2">
+        <span class="text-amber-300">Score <span id="gs-score">0</span></span>
+        <span class="text-emerald-300">HR <span id="gs-hr">0</span></span>
+        <span class="text-slate-300">Swings <span id="gs-swings">10</span></span>
+        <span class="text-cyan-300">Long <span id="gs-long">0</span> ft</span>
+      </div>
+      <div id="gs-pitch-type" class="text-xs font-bold text-amber-300 h-4"></div>
+      <div class="flex gap-3 w-full items-start">
+        <canvas id="gs-canvas" width="360" height="300" class="rounded-2xl border border-amber-400/40 bg-slate-950 touch-none flex-1"></canvas>
+        <div id="gs-rewards" class="w-28 shrink-0 bg-slate-950 border border-slate-800 rounded-xl p-2 text-[10px] space-y-2">
+          <p class="font-bold text-amber-300 text-xs">Rewards</p>
+          <div id="gs-tier-sr" class="border border-slate-700 rounded p-1">5 HR<br><span class="text-purple-300 font-bold">Super Rare</span></div>
+          <div id="gs-tier-i" class="border border-slate-700 rounded p-1">10 HR<br><span class="text-orange-300 font-bold">Iconic</span></div>
+          <div id="gs-tier-l" class="border border-slate-700 rounded p-1">15 HR<br><span class="text-yellow-300 font-bold">Legendary</span></div>
+          <p id="gs-next" class="text-slate-400">Next: 5 HR</p>
+        </div>
+      </div>
+      <p id="gs-status" class="text-center text-xs text-slate-300 mt-2 min-h-[32px]">Tap the field to throw a pitch.</p>
+      <div id="gs-result" class="hidden w-full mt-3 text-center space-y-2">
+        <p id="gs-result-text" class="font-bold text-amber-300"></p>
+        <button onclick="closeGrandSlam()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-xl text-xs">Collect Rewards</button>
+      </div>
     </div>
   </div>
 
@@ -582,6 +617,12 @@
       </div>
 
       <div class="flex items-center gap-3 flex-wrap">
+        <!-- GRAND SLAM GAME -->
+        <button onclick="openGrandSlam()" class="bg-gradient-to-r from-emerald-500 to-amber-400 text-slate-950 px-3 py-2 rounded-xl flex items-center gap-2 text-xs font-extrabold shadow-lg hover:scale-105 transition">
+          <i class="fa-solid fa-baseball-bat-ball text-sm"></i>
+          <span>Grand Slam</span>
+        </button>
+
         <!-- PRIZE WHEEL TRIGGER BUTTON -->
         <button onclick="openWheelModal()" class="bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 px-3 py-2 rounded-xl flex items-center gap-2 text-xs font-extrabold shadow-lg hover:scale-105 transition">
           <i class="fa-solid fa-arrows-spin text-sm"></i>
@@ -791,6 +832,27 @@
             <button onclick="buyPack('gemstones_premium')" class="w-full bg-gradient-to-r from-yellow-500 to-amber-400 hover:from-yellow-400 hover:to-amber-300 text-slate-950 font-extrabold py-2 rounded-lg text-xs shadow-lg">
               PREMIUM (2 SR, 1 ICONIC)<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>1000 Diamonds</span>
             </button>
+          </div>
+
+          <!-- APEX -->
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center border border-amber-400">
+                <i class="fa-solid fa-crown text-2xl text-amber-500"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-amber-200">Apex</h3><button onclick="showPackOdds('apex')" class="text-[10px] bg-slate-900 border border-amber-500 px-2 py-0.5 rounded-full text-amber-200 hover:text-white">Info</button></div>
+                <p class="text-xs text-slate-400">Turner, Wood, Peters · limited Legendaries</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="buyPack('apex_std')" class="flex-1 bg-slate-900 hover:bg-slate-800 font-bold py-2 rounded-lg text-xs border border-amber-500/40">
+                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>500 Coins</span>
+              </button>
+              <button onclick="buyPack('apex_super')" class="flex-1 bg-gradient-to-r from-slate-200 to-amber-400 hover:from-white hover:to-amber-300 text-slate-950 font-extrabold py-2 rounded-lg text-xs shadow-lg">
+                SUPER<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>500 Diamonds</span>
+              </button>
+            </div>
           </div>
 
           <!-- MYTHICAL -->
@@ -1090,7 +1152,38 @@
       1221: { id: 1221, name: "Bobby Witt Jr", rarity: "Iconic", set: "Mythical", image: "https://imgur.com/oXPNWmN.png" },
       1222: { id: 1222, name: "Jose Ramirez", rarity: "Iconic", set: "Mythical", image: "https://imgur.com/UhsE8Nd.png" },
       1223: { id: 1223, name: "Nick Gonzales", rarity: "Iconic", set: "Mythical", image: "https://imgur.com/P1sEKpX.png" },
-      1224: { id: 1224, name: "Junior Caminero", rarity: "Iconic", set: "Mythical", image: "https://imgur.com/deeJXwh.png" }
+      1224: { id: 1224, name: "Junior Caminero", rarity: "Iconic", set: "Mythical", image: "https://imgur.com/deeJXwh.png" },
+
+      // APEX
+      1401: { id: 1401, name: "James Wood", rarity: "Uncommon", set: "Apex", image: "https://imgur.com/juEvNAv.png" },
+      1402: { id: 1402, name: "Tristan Peters", rarity: "Uncommon", set: "Apex", image: "https://imgur.com/1nmOgRk.png" },
+      1403: { id: 1403, name: "Trea Turner", rarity: "Uncommon", set: "Apex", image: "https://imgur.com/jEmu2yk.png" },
+      1411: { id: 1411, name: "James Wood", rarity: "Rare", set: "Apex", image: "https://imgur.com/xozfayd.png" },
+      1412: { id: 1412, name: "Tristan Peters", rarity: "Rare", set: "Apex", image: "https://imgur.com/dhCNEQM.png" },
+      1413: { id: 1413, name: "Trea Turner", rarity: "Rare", set: "Apex", image: "https://imgur.com/3GyKDIX.png" },
+      1421: { id: 1421, name: "James Wood", rarity: "Rare", set: "Apex Signature", image: "https://imgur.com/2Ukh3Ua.png" },
+      1422: { id: 1422, name: "Tristan Peters", rarity: "Rare", set: "Apex Signature", image: "https://imgur.com/9UMFW0I.png" },
+      1423: { id: 1423, name: "Trea Turner", rarity: "Rare", set: "Apex Signature", image: "https://imgur.com/wex6ILN.png" },
+      1431: { id: 1431, name: "James Wood", rarity: "SuperRare", set: "Apex Signature", image: "https://imgur.com/2Ukh3Ua.png" },
+      1432: { id: 1432, name: "Tristan Peters", rarity: "SuperRare", set: "Apex Signature", image: "https://imgur.com/CRm1Koy.png" },
+      1433: { id: 1433, name: "Trea Turner", rarity: "SuperRare", set: "Apex Signature", image: "https://imgur.com/cqtRPxu.png" },
+      1441: { id: 1441, name: "James Wood", rarity: "Iconic", set: "Apex", image: "https://imgur.com/2rI2lbk.png" },
+      1442: { id: 1442, name: "Tristan Peters", rarity: "Iconic", set: "Apex", image: "https://imgur.com/Ebfkhs3.png" },
+      1443: { id: 1443, name: "Trea Turner", rarity: "Iconic", set: "Apex", image: "https://imgur.com/DXEqGFb.png" },
+      1451: { id: 1451, name: "James Wood", rarity: "Legendary", set: "Apex /50", image: "https://imgur.com/rinXBNe.png", limit: 50 },
+      1452: { id: 1452, name: "Tristan Peters", rarity: "Legendary", set: "Apex /50", image: "https://imgur.com/9GKWgCB.png", limit: 50 },
+      1453: { id: 1453, name: "Trea Turner", rarity: "Legendary", set: "Apex /50", image: "https://imgur.com/HE6co3q.png", limit: 50 },
+      1461: { id: 1461, name: "James Wood", rarity: "Legendary", set: "Apex /10", image: "https://imgur.com/X0QcNL3.png", limit: 10 },
+      1462: { id: 1462, name: "Tristan Peters", rarity: "Legendary", set: "Apex /10", image: "https://imgur.com/MPCeGQ7.png", limit: 10 },
+      1463: { id: 1463, name: "Trea Turner", rarity: "Legendary", set: "Apex /10", image: "https://imgur.com/BFEUXo2.png", limit: 10 },
+      1471: { id: 1471, name: "James Wood", rarity: "Legendary", set: "Apex /3", image: "https://imgur.com/BBttoJy.png", limit: 3 },
+      1472: { id: 1472, name: "Tristan Peters", rarity: "Legendary", set: "Apex /3", image: "https://imgur.com/zDabEhO.png", limit: 3 },
+      1473: { id: 1473, name: "Trea Turner", rarity: "Legendary", set: "Apex /3", image: "https://imgur.com/ksA7TT6.png", limit: 3 },
+
+      // GRAND SLAM
+      1302: { id: 1302, name: "Junior Caminero", rarity: "SuperRare", set: "Grand Slam", image: "https://imgur.com/ybBVLkw.png" },
+      1303: { id: 1303, name: "Junior Caminero", rarity: "Iconic", set: "Grand Slam", image: "https://imgur.com/uqR6x4Z.png" },
+      1304: { id: 1304, name: "Junior Caminero", rarity: "Legendary", set: "Grand Slam", image: "https://imgur.com/gly9aCj.png" }
     };
 
     const SETS_CONFIG = {
@@ -1103,7 +1196,9 @@
       that_balls_gone: { name: "That Ball's Gone", rewardCardId: null, requiredIds: [901, 902, 903, 904, 905] },
       world_series: { name: "World Series", rewardCardId: null, requiredIds: [1001, 1002, 1003, 1004, 1005, 1006, 1011, 1012, 1013, 1014, 1015, 1016] },
       legacy: { name: "Legacy", rewardCardId: null, requiredIds: [1101, 1102, 1103, 1104, 1105, 1106] },
-      mythical: { name: "Mythical", rewardCardId: null, requiredIds: [1201, 1202, 1203, 1204, 1211, 1212, 1213, 1214, 1221, 1222, 1223, 1224] }
+      mythical: { name: "Mythical", rewardCardId: null, requiredIds: [1201, 1202, 1203, 1204, 1211, 1212, 1213, 1214, 1221, 1222, 1223, 1224] },
+      grand_slam: { name: "Grand Slam", rewardCardId: null, requiredIds: [1302, 1303, 1304] },
+      apex: { name: "Apex", rewardCardId: null, requiredIds: [1401, 1402, 1403, 1411, 1412, 1413, 1421, 1422, 1423, 1431, 1432, 1433, 1441, 1442, 1443, 1451, 1452, 1453, 1461, 1462, 1463, 1471, 1472, 1473] }
     };
 
     const MISSIONS_CONFIG = {
@@ -1163,6 +1258,13 @@
     const MYTH_RARE_IDS = [1201, 1202, 1203, 1204];
     const MYTH_SR_IDS = [1211, 1212, 1213, 1214];
     const MYTH_ICONIC_IDS = [1221, 1222, 1223, 1224];
+    const APEX_UC_IDS = [1401, 1402, 1403];
+    const APEX_RARE_IDS = [1411, 1412, 1413, 1421, 1422, 1423];
+    const APEX_SR_IDS = [1431, 1432, 1433];
+    const APEX_ICONIC_IDS = [1441, 1442, 1443];
+    const APEX_L50_IDS = [1451, 1452, 1453];
+    const APEX_L10_IDS = [1461, 1462, 1463];
+    const APEX_L3_IDS = [1471, 1472, 1473];
     const DIAMOND_UC_IDS = [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212];
     const SUPERSTARS_RARE_IDS = [301, 302, 303, 304, 305];
     const SUPERNOVA_SR_IDS = [401, 402, 403, 404, 405];
@@ -2134,6 +2236,10 @@
 
     function flipCard(el) { el.querySelector('.card-flipper').classList.toggle('flipped'); }
     function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function getLimitedCard(ids, limit) {
+      const open = ids.filter(id => (globalCardCounts[id] || 0) < limit);
+      return open.length ? getRandom(open) : null;
+    }
 
     const PACK_ODDS = {
       common: [
@@ -2169,6 +2275,12 @@
         "Standard (500 coins): 5 cards.",
         "1 World Series Uncommon guaranteed.",
         "1 in 5 Rare."
+      ],
+      apex: [
+        "Standard (500 coins): 1 Apex Uncommon.",
+        "1 in 3 Rare, 1 in 15 Super Rare, 1 in 40 Iconic. No Legendaries.",
+        "Super (500 diamonds): 4 Uncommons, 3 Rares, 2 Super Rares.",
+        "1 in 3 Iconic, 1 in 5 Legendary /50, 1 in 15 Legendary /10, 1 in 25 Legendary /3."
       ],
       legacy: [
         "Standard (500 coins): 5 cards.",
@@ -2268,6 +2380,8 @@
       else if (packVariant === 'legacy_super') costDiamonds = 250;
       else if (packVariant === 'mythical_std') costCoins = 500;
       else if (packVariant === 'mythical_super') costDiamonds = 250;
+      else if (packVariant === 'apex_std') costCoins = 500;
+      else if (packVariant === 'apex_super') costDiamonds = 500;
       else if (packVariant === 'blackout_super') costDiamonds = 300;
 
       if (userCoins < costCoins) return alert("Not enough coins!");
@@ -2335,6 +2449,26 @@
           getRandom(COMMON_IDS), getRandom(COMMON_IDS)
         ];
         if (Math.random() < 1/5) pendingPackPulledCards[3] = getRandom(GEM_LEGENDARY_IDS);
+      } else if (packVariant === 'apex_std') {
+        pendingPackPulledCards = [
+          getRandom(APEX_UC_IDS),
+          getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
+        ];
+        if (Math.random() < 1/40) pendingPackPulledCards[1] = getRandom(APEX_ICONIC_IDS);
+        else if (Math.random() < 1/15) pendingPackPulledCards[1] = getRandom(APEX_SR_IDS);
+        else if (Math.random() < 1/3) pendingPackPulledCards[1] = getRandom(APEX_RARE_IDS);
+      } else if (packVariant === 'apex_super') {
+        pendingPackPulledCards = [
+          getRandom(APEX_UC_IDS), getRandom(APEX_UC_IDS), getRandom(APEX_UC_IDS), getRandom(APEX_UC_IDS),
+          getRandom(APEX_RARE_IDS), getRandom(APEX_RARE_IDS), getRandom(APEX_RARE_IDS),
+          getRandom(APEX_SR_IDS), getRandom(APEX_SR_IDS)
+        ];
+        let chase = null;
+        if (Math.random() < 1/25) chase = getLimitedCard(APEX_L3_IDS, 3);
+        if (!chase && Math.random() < 1/15) chase = getLimitedCard(APEX_L10_IDS, 10);
+        if (!chase && Math.random() < 1/5) chase = getLimitedCard(APEX_L50_IDS, 50);
+        if (!chase && Math.random() < 1/3) chase = getRandom(APEX_ICONIC_IDS);
+        if (chase) pendingPackPulledCards.push(chase);
       } else if (packVariant === 'mythical_std') {
         pendingPackPulledCards = [
           getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
@@ -2435,6 +2569,13 @@
         pRightTitle.textContent = "STONES";
         pLeftIcon.innerHTML = `<i class="fa-solid fa-gem text-4xl text-amber-300"></i>`;
         pRightIcon.innerHTML = `<i class="fa-solid fa-gem text-4xl text-yellow-300"></i>`;
+      } else if (packType === 'apex') {
+        pLeft.classList.add('pack-foil-apex');
+        pRight.classList.add('pack-foil-apex');
+        pLeftTitle.textContent = "APEX";
+        pRightTitle.textContent = "PACK";
+        pLeftIcon.innerHTML = `<i class="fa-solid fa-crown text-4xl text-amber-500"></i>`;
+        pRightIcon.innerHTML = `<i class="fa-solid fa-crown text-4xl text-slate-700"></i>`;
       } else if (packType === 'mythical') {
         pLeft.classList.add('pack-foil-mythical');
         pRight.classList.add('pack-foil-mythical');
@@ -3352,6 +3493,193 @@
       } catch (err) {
         alert("Trade failed: " + err.message);
       }
+    }
+
+    /* GRAND SLAM MINI GAME */
+    let gs = null;
+    function openGrandSlam() {
+      document.getElementById("grandslam-modal").classList.remove("hidden");
+      document.getElementById("gs-result").classList.add("hidden");
+      startGrandSlam();
+    }
+    function closeGrandSlam() {
+      document.getElementById("grandslam-modal").classList.add("hidden");
+      if (gs && gs.raf) cancelAnimationFrame(gs.raf);
+      gs = null;
+    }
+    function startGrandSlam() {
+      const canvas = document.getElementById("gs-canvas");
+      gs = {
+        canvas,
+        ctx: canvas.getContext("2d"),
+        score: 0, hrs: 0, swings: 15, longest: 0,
+        pci: { x: 180, y: 170, r: 26 },
+        pitch: null,
+        active: false,
+        holding: false,
+        done: false,
+        raf: 0
+      };
+      bindGrandSlamInput();
+      updateGrandSlamHud("Tap the field to throw a pitch.");
+      drawGrandSlam();
+    }
+    function updateGrandSlamHud(msg) {
+      document.getElementById("gs-score").textContent = gs.score;
+      document.getElementById("gs-hr").textContent = gs.hrs;
+      document.getElementById("gs-swings").textContent = gs.swings;
+      document.getElementById("gs-long").textContent = gs.longest;
+      const mark = (id, on) => {
+        const el = document.getElementById(id);
+        if (el) el.className = on ? "border border-emerald-400 bg-emerald-500/20 rounded p-1" : "border border-slate-700 rounded p-1";
+      };
+      mark("gs-tier-sr", gs.hrs >= 5);
+      mark("gs-tier-i", gs.hrs >= 10);
+      mark("gs-tier-l", gs.hrs >= 15);
+      const next = document.getElementById("gs-next");
+      if (next) next.textContent = gs.hrs >= 15 ? "Legendary unlocked" : gs.hrs >= 10 ? "Next: 15 HR" : gs.hrs >= 5 ? "Next: 10 HR" : "Next: 5 HR";
+      if (msg) document.getElementById("gs-status").textContent = msg;
+    }
+    function bindGrandSlamInput() {
+      const c = gs.canvas;
+      const move = (clientX, clientY) => {
+        const r = c.getBoundingClientRect();
+        gs.pci.x = ((clientX - r.left) / r.width) * c.width;
+        gs.pci.y = ((clientY - r.top) / r.height) * c.height;
+        if (!gs.active) drawGrandSlam();
+      };
+      c.onmousemove = e => move(e.clientX, e.clientY);
+      c.onmousedown = e => { move(e.clientX, e.clientY); handleGrandSlamPress(); };
+      c.ontouchstart = e => { e.preventDefault(); gs.holding = true; move(e.touches[0].clientX, e.touches[0].clientY); };
+      c.ontouchmove = e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); };
+      c.ontouchend = e => { e.preventDefault(); if (gs.holding) { gs.holding = false; handleGrandSlamPress(); } };
+    }
+    function handleGrandSlamPress() {
+      if (!gs || gs.done || gs.swings <= 0) return;
+      if (!gs.active) startGrandSlamPitch();
+      else grandSlamSwing();
+    }
+    function startGrandSlamPitch() {
+      const roll = Math.random();
+      let type = "Fastball", speed = 6.2 + Math.random() * 1.4, vx = 0, acc = 0;
+      if (roll > 0.7) { type = "Slider"; speed = 5.2 + Math.random(); vx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 0.6); }
+      else if (roll > 0.4) { type = "Changeup"; speed = 3.4 + Math.random() * 0.8; acc = 0.1; }
+      gs.pitch = { x: 80 + Math.random() * 200, y: -10, speed, vx, acc, r: 5, type };
+      gs.active = true;
+      document.getElementById("gs-pitch-type").textContent = type;
+      updateGrandSlamHud("Pitch incoming...");
+      animateGrandSlamPitch();
+    }
+    function animateGrandSlamPitch() {
+      if (!gs || !gs.active || !gs.pitch) return;
+      gs.pitch.y += gs.pitch.speed;
+      gs.pitch.speed += gs.pitch.acc;
+      gs.pitch.x += gs.pitch.vx;
+      gs.pitch.r += 0.22;
+      drawGrandSlam();
+      if (gs.pitch.y < gs.canvas.height + 10) {
+        gs.raf = requestAnimationFrame(animateGrandSlamPitch);
+      } else {
+        gs.active = false;
+        const inZone = gs.pitch.x >= 100 && gs.pitch.x <= 260;
+        if (inZone) { gs.swings--; updateGrandSlamHud("Called strike. Tap for the next pitch."); }
+        else updateGrandSlamHud("Ball. Good eye. Tap for the next pitch.");
+        checkGrandSlamEnd();
+      }
+    }
+    function grandSlamSwing() {
+      if (!gs || !gs.active || !gs.pitch) return;
+      cancelAnimationFrame(gs.raf);
+      gs.active = false;
+      const dist = Math.hypot(gs.pitch.x - gs.pci.x, gs.pitch.y - gs.pci.y);
+      const hrMargin = gs.pci.r * 0.58;
+      const hitMargin = gs.pci.r * 1.0;
+      let text = "Swing and miss!";
+      if (dist < hrMargin && gs.pitch.y > 95 && gs.pitch.y < 255) {
+        const distance = Math.floor(400 - dist * 4 + (Math.random() * 16 - 8));
+        if (distance >= 355) {
+          gs.hrs += 1;
+          gs.longest = Math.max(gs.longest, distance);
+          const pts = distance > 400 ? 100 + (distance - 400) : 100;
+          gs.score += pts;
+          text = "HOME RUN! " + distance + " ft  +" + pts;
+          if (gs.swings === 1) text += "  Last swing back!";
+          else gs.swings--;
+        } else {
+          gs.swings--;
+          text = "Warning track out. " + distance + " ft";
+        }
+      } else if (dist < hitMargin) {
+        gs.swings--;
+        text = "Weak contact / foul.";
+      } else {
+        gs.swings--;
+        text = "Swing and miss!";
+      }
+      updateGrandSlamHud(text);
+      drawGrandSlam();
+      checkGrandSlamEnd();
+    }
+    function checkGrandSlamEnd() {
+      if (!gs) return;
+      updateGrandSlamHud();
+      if (gs.swings <= 0 && !gs.done) finishGrandSlam();
+    }
+    function drawGrandSlam() {
+      if (!gs) return;
+      const { ctx, canvas: c, pci, pitch, active } = gs;
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = "#14532d";
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.strokeStyle = "rgba(255,255,255,0.4)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(100, 90, 160, 140);
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.moveTo(150, 250); ctx.lineTo(210, 250); ctx.lineTo(210, 260); ctx.lineTo(180, 275); ctx.lineTo(150, 260);
+      ctx.fill();
+      if (active && pitch) {
+        ctx.beginPath();
+        ctx.fillStyle = "#fff";
+        ctx.arc(pitch.x, pitch.y, pitch.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#ef4444";
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 2;
+      ctx.arc(pci.x, pci.y, pci.r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = "#facc15";
+      ctx.beginPath();
+      ctx.arc(pci.x, pci.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    async function finishGrandSlam() {
+      if (!gs || gs.done) return;
+      gs.done = true;
+      const hrs = gs.hrs;
+      const score = gs.score;
+      const coins = 200 + score * 2 + hrs * 80;
+      const diamonds = hrs >= 5 ? 60 : hrs >= 3 ? 25 : hrs >= 1 ? 10 : 0;
+      userCoins += coins;
+      userDiamonds += diamonds;
+      let cardMsg = "";
+      let rewardId = null;
+      if (hrs >= 15) rewardId = 1304;
+      else if (hrs >= 10) rewardId = 1303;
+      else if (hrs >= 5) rewardId = 1302;
+      if (rewardId) {
+        userCards.push(rewardId);
+        const rc = CARDS_CATALOG[rewardId];
+        cardMsg = " · CARD: " + rc.name + " " + rc.rarity;
+      }
+      await saveUserData();
+      document.getElementById("gs-result").classList.remove("hidden");
+      document.getElementById("gs-result-text").textContent = hrs + " HR · " + score + " pts · Long " + gs.longest + " ft · +" + coins + " coins" + (diamonds ? " · +" + diamonds + " diamonds" : "") + cardMsg;
+      updateGrandSlamHud("Derby complete!");
+      showNotification("Grand Slam rewards claimed!");
     }
 
     async function declineTradeProposal(tradeId) {
