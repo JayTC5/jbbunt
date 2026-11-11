@@ -57,6 +57,17 @@
       object-fit: cover;
       object-position: center;
     }
+    .le-banner {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      color: #facc15;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-align: center;
+      padding: 1px 0;
+    }
 
     /* Rarity Glows & Borders */
     .glow-Common { border: 2px solid #64748b; box-shadow: 0 0 10px rgba(100, 116, 139, 0.4); }
@@ -430,8 +441,15 @@
         <div id="sell-card-preview" class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center gap-4"></div>
 
         <div>
-          <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Selling Price (Coins)</label>
-          <input type="number" id="sell-price-input" min="10" placeholder="Enter coin amount (e.g. 250)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white font-bold text-lg focus:outline-none focus:border-amber-400">
+          <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Currency</label>
+          <select id="sell-currency" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white font-bold">
+            <option value="coins">Coins</option>
+            <option value="diamonds">Diamonds</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Selling Price</label>
+          <input type="number" id="sell-price-input" min="1" placeholder="Enter amount" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white font-bold text-lg focus:outline-none focus:border-amber-400">
         </div>
 
         <button onclick="confirmListCard()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-3 rounded-xl transition text-sm shadow-lg">Post to Player Market</button>
@@ -834,6 +852,27 @@
             </button>
           </div>
 
+          <!-- CYCLE -->
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-cyan-950 flex items-center justify-center border border-cyan-500/50">
+                <i class="fa-solid fa-rotate text-2xl text-cyan-300"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-cyan-300">Cycle</h3><button onclick="showPackOdds('cycle')" class="text-[10px] bg-cyan-950 border border-cyan-700 px-2 py-0.5 rounded-full text-cyan-200 hover:text-white">Info</button></div>
+                <p class="text-xs text-slate-400">Tristan Peters</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="buyPack('cycle_std')" class="flex-1 bg-cyan-950/60 hover:bg-cyan-900/60 font-bold py-2 rounded-lg text-xs border border-cyan-700">
+                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>500 Coins</span>
+              </button>
+              <button onclick="buyPack('cycle_super')" class="flex-1 bg-gradient-to-r from-cyan-600 to-blue-500 font-extrabold py-2 rounded-lg text-xs shadow-lg">
+                SUPER (1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>300 Diamonds</span>
+              </button>
+            </div>
+          </div>
+
           <!-- APEX -->
           <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
             <div class="flex items-center gap-3">
@@ -1180,6 +1219,12 @@
       1472: { id: 1472, name: "Tristan Peters", rarity: "Legendary", set: "Apex /3", image: "https://imgur.com/zDabEhO.png", limit: 3 },
       1473: { id: 1473, name: "Trea Turner", rarity: "Legendary", set: "Apex /3", image: "https://imgur.com/ksA7TT6.png", limit: 3 },
 
+      // CYCLE
+      1501: { id: 1501, name: "Tristan Peters", rarity: "Rare", set: "Cycle", image: "https://imgur.com/yvrZ480.png" },
+      1502: { id: 1502, name: "Tristan Peters", rarity: "SuperRare", set: "Cycle", image: "https://imgur.com/3HUMt54.png" },
+      1503: { id: 1503, name: "Tristan Peters", rarity: "Iconic", set: "Cycle", image: "https://imgur.com/bcI03Fz.png" },
+      1504: { id: 1504, name: "Tristan Peters", rarity: "Legendary", set: "Cycle", image: "https://imgur.com/CiSPgiI.png" },
+
       // GRAND SLAM
       1302: { id: 1302, name: "Junior Caminero", rarity: "SuperRare", set: "Grand Slam", image: "https://imgur.com/ybBVLkw.png" },
       1303: { id: 1303, name: "Junior Caminero", rarity: "Iconic", set: "Grand Slam", image: "https://imgur.com/uqR6x4Z.png" },
@@ -1198,7 +1243,8 @@
       legacy: { name: "Legacy", rewardCardId: null, requiredIds: [1101, 1102, 1103, 1104, 1105, 1106] },
       mythical: { name: "Mythical", rewardCardId: null, requiredIds: [1201, 1202, 1203, 1204, 1211, 1212, 1213, 1214, 1221, 1222, 1223, 1224] },
       grand_slam: { name: "Grand Slam", rewardCardId: null, requiredIds: [1302, 1303, 1304] },
-      apex: { name: "Apex", rewardCardId: null, requiredIds: [1401, 1402, 1403, 1411, 1412, 1413, 1421, 1422, 1423, 1431, 1432, 1433, 1441, 1442, 1443, 1451, 1452, 1453, 1461, 1462, 1463, 1471, 1472, 1473] }
+      apex: { name: "Apex", rewardCardId: null, requiredIds: [1401, 1402, 1403, 1411, 1412, 1413, 1421, 1422, 1423, 1431, 1432, 1433, 1441, 1442, 1443, 1451, 1452, 1453, 1461, 1462, 1463, 1471, 1472, 1473] },
+      cycle: { name: "Cycle", rewardCardId: null, requiredIds: [1501, 1502, 1503, 1504] }
     };
 
     const MISSIONS_CONFIG = {
@@ -1265,6 +1311,10 @@
     const APEX_L50_IDS = [1451, 1452, 1453];
     const APEX_L10_IDS = [1461, 1462, 1463];
     const APEX_L3_IDS = [1471, 1472, 1473];
+    const CYCLE_RARE_IDS = [1501];
+    const CYCLE_SR_IDS = [1502];
+    const CYCLE_ICONIC_IDS = [1503];
+    const CYCLE_LEG_IDS = [1504];
     const DIAMOND_UC_IDS = [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212];
     const SUPERSTARS_RARE_IDS = [301, 302, 303, 304, 305];
     const SUPERNOVA_SR_IDS = [401, 402, 403, 404, 405];
@@ -1618,7 +1668,8 @@
 
     async function confirmListCard() {
       const priceVal = parseInt(document.getElementById('sell-price-input').value);
-      if (!priceVal || priceVal <= 0) return alert("Please enter a valid price in coins!");
+      const currency = document.getElementById('sell-currency').value || 'coins';
+      if (!priceVal || priceVal <= 0) return alert("Please enter a valid price!");
       if (!cardToListingId) return;
 
       const idx = userCards.indexOf(cardToListingId);
@@ -1632,12 +1683,13 @@
         sellerUsername: window.currentUsername,
         cardId: cardToListingId,
         price: priceVal,
+        currency: currency,
         timestamp: Date.now()
       });
 
       renderCollection();
       closeSellModal();
-      showNotification("Listed card for " + priceVal + " coins!");
+      showNotification("Listed card for " + priceVal + " " + currency + "!");
     }
 
     function initMarketplaceListener() {
@@ -1712,10 +1764,10 @@
               <p class="text-[9px] text-slate-500">${card.rarity} • ${card.set}</p>
             </div>
             <div class="text-right flex flex-col items-end gap-1">
-              <span class="font-bold text-xs text-amber-300"><i class="fa-solid fa-coins mr-1"></i>${listing.price}</span>
+              <span class="font-bold text-xs ${listing.currency === 'diamonds' ? 'text-cyan-300' : 'text-amber-300'}"><i class="fa-solid ${listing.currency === 'diamonds' ? 'fa-gem' : 'fa-coins'} mr-1"></i>${listing.price}</span>
               ${isMine 
                 ? `<button onclick="cancelListing('${listing.id}', ${listing.cardId})" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white text-[9px] font-bold px-2 py-0.5 rounded">Cancel</button>`
-                : `<button onclick="buyFromShop('${listing.id}', '${listing.sellerUid}', ${listing.cardId}, ${listing.price})" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-[9px] px-2.5 py-1 rounded shadow">Buy</button>`
+                : `<button onclick="buyFromShop('${listing.id}', '${listing.sellerUid}', ${listing.cardId}, ${listing.price}, '${listing.currency || 'coins'}')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-[9px] px-2.5 py-1 rounded shadow">Buy</button>`
               }
             </div>
           </div>
@@ -1731,8 +1783,10 @@
       showNotification("Listing canceled. Card returned.");
     }
 
-    async function buyFromShop(listingId, sellerUid, cardId, price) {
-      if (userCoins < price) return alert("You don't have enough coins to buy this card!");
+    async function buyFromShop(listingId, sellerUid, cardId, price, currency) {
+      currency = currency || 'coins';
+      if (currency === 'diamonds' && userDiamonds < price) return alert("You don't have enough diamonds!");
+      if (currency !== 'diamonds' && userCoins < price) return alert("You don't have enough coins!");
 
       try {
         await window.runTransaction(window.db, async (transaction) => {
@@ -1746,14 +1800,20 @@
           const sellerSnap = await transaction.get(sellerRef);
 
           if (sellerSnap.exists()) {
-            const sellerCoins = sellerSnap.data().coins || 0;
-            transaction.update(sellerRef, { coins: sellerCoins + price });
+            if (currency === 'diamonds') {
+              const sellerDiamonds = sellerSnap.data().diamonds || 0;
+              transaction.update(sellerRef, { diamonds: sellerDiamonds + price });
+            } else {
+              const sellerCoins = sellerSnap.data().coins || 0;
+              transaction.update(sellerRef, { coins: sellerCoins + price });
+            }
           }
 
           transaction.delete(listingRef);
         });
 
-        userCoins -= price;
+        if (currency === 'diamonds') userDiamonds -= price;
+        else userCoins -= price;
         userCards.push(cardId);
         await saveUserData();
         checkAndGrantAwards();
@@ -1904,6 +1964,50 @@
     }
 
     function renderSets() {
+      const list = document.getElementById('sets-list');
+      if (!list) return;
+      list.innerHTML = "";
+
+      Object.keys(SETS_CONFIG).forEach(key => {
+        const setObj = SETS_CONFIG[key];
+        const groups = {};
+        setObj.requiredIds.forEach(id => {
+          const c = CARDS_CATALOG[id];
+          if (!c) return;
+          groups[c.rarity] = groups[c.rarity] || [];
+          groups[c.rarity].push(id);
+        });
+        Object.keys(groups).forEach(rarity => {
+          const ids = groups[rarity];
+          if (ids.length < 1) return;
+          const ownedCount = ids.filter(id => userCards.includes(id)).length;
+          const totalCount = ids.length;
+          const isComplete = ownedCount === totalCount;
+          const progressPct = Math.floor((ownedCount / totalCount) * 100);
+          const preview = CARDS_CATALOG[ids[0]];
+          list.innerHTML += `
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3">
+              <div class="card-img-frame !w-12 !h-16 flex-shrink-0 cursor-pointer relative" onclick="openCardDetailModal(${preview.id})">
+                <img src="${preview.image}" alt="${preview.name}">
+              </div>
+              <div class="flex-1">
+                <h4 class="font-bold text-xs text-amber-300">${setObj.name} ${rarity}</h4>
+                <p class="text-[10px] text-slate-400">Same-rarity set</p>
+                <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden my-1">
+                  <div class="bg-amber-400 h-full" style="width: ${progressPct}%"></div>
+                </div>
+                <p class="text-[9px] text-slate-500">${ownedCount} / ${totalCount} Cards</p>
+              </div>
+              <div class="text-right">
+                ${isComplete ? `<span class="bg-emerald-500/20 text-emerald-400 font-bold text-[10px] px-2 py-1 rounded border border-emerald-500/40">Completed</span>` : `<span class="text-slate-500 text-[10px]">In Progress</span>`}
+              </div>
+            </div>
+          `;
+        });
+      });
+    }
+
+    function renderSetsOld() {
       const list = document.getElementById('sets-list');
       if (!list) return;
       list.innerHTML = "";
@@ -2197,8 +2301,9 @@
               <div class="card-flipper relative w-full h-full rounded-2xl glow-${card.rarity} bg-slate-900 p-2 flex flex-col justify-between overflow-hidden">
                 <div class="card-front flex flex-col justify-between p-2 h-full relative">
                   ${count > 1 ? `<div class="absolute top-3 right-3 bg-amber-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded-full shadow-lg z-10">${count}x</div>` : ''}
-                  <div class="card-img-frame mb-1">
+                  <div class="card-img-frame mb-1 relative">
                     <img src="${card.image}" alt="${card.name}">
+                    ${card.limit ? `<div class="le-banner">LE ${card.limit}</div>` : ''}
                   </div>
                   <div class="text-center mb-1">
                     <h3 class="font-baseball text-2xl text-amber-300 leading-none">${card.name}</h3>
@@ -2281,6 +2386,11 @@
         "1 in 3 Rare, 1 in 15 Super Rare, 1 in 40 Iconic. No Legendaries.",
         "Super (500 diamonds): 4 Uncommons, 3 Rares, 2 Super Rares.",
         "1 in 3 Iconic, 1 in 5 Legendary /50, 1 in 15 Legendary /10, 1 in 25 Legendary /3."
+      ],
+      cycle: [
+        "Standard (500 coins): 1 Cycle Rare.",
+        "1 in 5 Super Rare, 1 in 15 Iconic, 1 in 40 Legendary.",
+        "Super (300 diamonds): 1 Super Rare, 1 in 3 Iconic, 1 in 8 Legendary."
       ],
       legacy: [
         "Standard (500 coins): 5 cards.",
@@ -2382,6 +2492,8 @@
       else if (packVariant === 'mythical_super') costDiamonds = 250;
       else if (packVariant === 'apex_std') costCoins = 500;
       else if (packVariant === 'apex_super') costDiamonds = 500;
+      else if (packVariant === 'cycle_std') costCoins = 500;
+      else if (packVariant === 'cycle_super') costDiamonds = 300;
       else if (packVariant === 'blackout_super') costDiamonds = 300;
 
       if (userCoins < costCoins) return alert("Not enough coins!");
@@ -2449,6 +2561,21 @@
           getRandom(COMMON_IDS), getRandom(COMMON_IDS)
         ];
         if (Math.random() < 1/5) pendingPackPulledCards[3] = getRandom(GEM_LEGENDARY_IDS);
+      } else if (packVariant === 'cycle_std') {
+        pendingPackPulledCards = [
+          getRandom(CYCLE_RARE_IDS),
+          getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
+        ];
+        if (Math.random() < 1/40) pendingPackPulledCards[1] = getRandom(CYCLE_LEG_IDS);
+        else if (Math.random() < 1/15) pendingPackPulledCards[1] = getRandom(CYCLE_ICONIC_IDS);
+        else if (Math.random() < 1/5) pendingPackPulledCards[1] = getRandom(CYCLE_SR_IDS);
+      } else if (packVariant === 'cycle_super') {
+        pendingPackPulledCards = [
+          getRandom(CYCLE_SR_IDS),
+          getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
+        ];
+        if (Math.random() < 1/8) pendingPackPulledCards[1] = getRandom(CYCLE_LEG_IDS);
+        else if (Math.random() < 1/3) pendingPackPulledCards[1] = getRandom(CYCLE_ICONIC_IDS);
       } else if (packVariant === 'apex_std') {
         pendingPackPulledCards = [
           getRandom(APEX_UC_IDS),
@@ -2569,6 +2696,13 @@
         pRightTitle.textContent = "STONES";
         pLeftIcon.innerHTML = `<i class="fa-solid fa-gem text-4xl text-amber-300"></i>`;
         pRightIcon.innerHTML = `<i class="fa-solid fa-gem text-4xl text-yellow-300"></i>`;
+      } else if (packType === 'cycle') {
+        pLeft.classList.add('pack-foil-apex');
+        pRight.classList.add('pack-foil-apex');
+        pLeftTitle.textContent = "CYCLE";
+        pRightTitle.textContent = "PACK";
+        pLeftIcon.innerHTML = `<i class="fa-solid fa-rotate text-4xl text-cyan-300"></i>`;
+        pRightIcon.innerHTML = `<i class="fa-solid fa-rotate text-4xl text-blue-300"></i>`;
       } else if (packType === 'apex') {
         pLeft.classList.add('pack-foil-apex');
         pRight.classList.add('pack-foil-apex');
