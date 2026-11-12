@@ -2182,7 +2182,7 @@
         
         // 30 MIN COIN TIMER
         const elapsedCoin = now - lastCoinClaimTime;
-        const thirtyMins = 60 * 1000;
+        const thirtyMins = 30 * 60 * 1000;
 
         if (elapsedCoin >= thirtyMins) {
           document.getElementById('coin-timer-text').classList.add('hidden');
@@ -2231,12 +2231,20 @@
       startTimers();
     }
 
+    let coinClaimLock = false;
     async function claimCoinBonus() {
+      if (coinClaimLock) return;
+      const thirtyMins = 30 * 60 * 1000;
+      if (Date.now() - lastCoinClaimTime < thirtyMins) return;
+      coinClaimLock = true;
+      const btn = document.getElementById('claim-coins-btn');
+      if (btn) btn.classList.add('hidden');
       userCoins += 1500;
       lastCoinClaimTime = Date.now();
       await saveUserData();
       showNotification("1,500 Coin bonus claimed!");
       startTimers();
+      coinClaimLock = false;
     }
 
     function checkAndGrantAwards() {
