@@ -147,7 +147,7 @@
   <!-- Firebase Modular SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, orderBy, limit, getDocs, onSnapshot, updateDoc, deleteDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -166,8 +166,8 @@
 
     window.db = db;
     window.auth = auth;
-    window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-    window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    window.GoogleAuthProvider = GoogleAuthProvider;
+    window.signInWithPopup = signInWithPopup;
     window.signOut = signOut;
     window.doc = doc;
     window.setDoc = setDoc;
@@ -279,19 +279,10 @@
           <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Username</label>
           <input type="text" id="auth-username" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-400" placeholder="CardCollector26">
         </div>
-        <div>
-          <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Email</label>
-          <input type="email" id="auth-email" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-400" placeholder="collector@bunt.com">
-        </div>
-        <div>
-          <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Password</label>
-          <input type="password" id="auth-password" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-amber-400" placeholder="••••••••">
-        </div>
-        
-        <div class="flex gap-3 pt-2">
-          <button onclick="handleLogin()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-3 rounded-lg transition">Log In</button>
-          <button onclick="handleSignup()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-lg transition">Sign Up</button>
-        </div>
+        <button onclick="handleGoogleSignIn()" class="w-full bg-white hover:bg-slate-100 text-slate-950 font-extrabold py-3 rounded-lg transition flex items-center justify-center gap-2">
+          <i class="fa-brands fa-google"></i> Sign in with Google
+        </button>
+        <p class="text-[11px] text-slate-500 text-center">Google accounts only. Fake emails are blocked.</p>
         <p id="auth-error" class="text-red-400 text-xs text-center mt-2"></p>
       </div>
     </div>
@@ -1615,45 +1606,13 @@
       document.getElementById('detail-card-flipper').classList.toggle('flipped');
     }
 
-    async function handleSignup() {
+    async function handleGoogleSignIn() {
       const usernameInput = document.getElementById('auth-username').value.trim();
-      const email = document.getElementById('auth-email').value.trim();
-      const password = document.getElementById('auth-password').value.trim();
       if (!usernameInput) return alert("Please enter a username!");
-
       window.pendingUsernameInput = usernameInput;
-
       try {
-        const cred = await window.createUserWithEmailAndPassword(window.auth, email, password);
-        await window.setDoc(window.doc(window.db, "users", cred.user.uid), {
-          email: email,
-          username: usernameInput,
-          username_lowercase: usernameInput.toLowerCase(),
-          coins: 1000,
-          diamonds: 200,
-          collection: [1, 2, 3],
-          lastCoinClaim: Date.now(),
-          lastDailyDiamondClaim: 0,
-          missions: {},
-          lastMissionReset: Date.now(),
-          eventProgress: {},
-          redeemedCodes: [],
-          lastWheelSpin: 0
-        });
-      } catch (err) {
-        document.getElementById('auth-error').textContent = err.message;
-      }
-    }
-
-    async function handleLogin() {
-      const usernameInput = document.getElementById('auth-username').value.trim();
-      if (usernameInput) {
-        window.pendingUsernameInput = usernameInput;
-      }
-      const email = document.getElementById('auth-email').value.trim();
-      const password = document.getElementById('auth-password').value.trim();
-      try {
-        await window.signInWithEmailAndPassword(window.auth, email, password);
+        const provider = new window.GoogleAuthProvider();
+        await window.signInWithPopup(window.auth, provider);
       } catch (err) {
         document.getElementById('auth-error').textContent = err.message;
       }
