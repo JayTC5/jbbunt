@@ -1003,18 +1003,7 @@
       <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
         <h2 class="font-baseball text-3xl mb-4 text-amber-400"><i class="fa-solid fa-newspaper mr-2"></i>News</h2>
         <div id="news-list" class="space-y-3"></div>
-        <div class="mt-4 border-t border-slate-800 pt-4">
-          <p class="text-[11px] text-slate-400 mb-2">Owner only. Enter the code to post.</p>
-          <div class="flex gap-2 mb-2">
-            <input id="news-code" type="password" placeholder="Owner code" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
-            <button onclick="unlockNewsPost()" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs">Unlock</button>
-          </div>
-          <div id="news-post-box" class="hidden space-y-2">
-            <input id="news-title" placeholder="Title" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
-            <textarea id="news-body" rows="3" placeholder="News update" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white"></textarea>
-            <button onclick="postNews()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-lg text-xs">Post News</button>
-          </div>
-        </div>
+        <div id="news-detail" class="hidden mt-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3"></div>
       </div>
     </section>
 
@@ -1451,38 +1440,63 @@
     }
 
     /* NAV TAB SWITCHING */
-    function unlockNewsPost() {
-      if (document.getElementById("news-code").value.trim() !== "NUMBER5") return alert("Wrong code.");
-      document.getElementById("news-post-box").classList.remove("hidden");
-    }
-    async function postNews() {
-      const title = document.getElementById("news-title").value.trim();
-      const body = document.getElementById("news-body").value.trim();
-      if (!title || !body) return alert("Add a title and a message.");
-      await window.addDoc(window.collection(window.db, "news"), {
-        title, body, timestamp: Date.now(), author: window.currentUsername || "Owner"
-      });
-      document.getElementById("news-title").value = "";
-      document.getElementById("news-body").value = "";
-      showNotification("News posted!");
-    }
+    let newsCache = [];
     function initNewsListener() {
       const qNews = window.query(window.collection(window.db, "news"), window.orderBy("timestamp", "desc"), window.limit(20));
       window.onSnapshot(qNews, (snap) => {
-        const list = document.getElementById("news-list");
-        if (!list) return;
-        if (snap.empty) { list.innerHTML = '<p class="text-slate-500 text-xs">No news yet.</p>'; return; }
-        list.innerHTML = "";
-        snap.forEach(docSnap => {
-          const n = docSnap.data();
-          list.innerHTML += `
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
-              <div class="flex justify-between text-[10px] text-slate-500 mb-1"><span>${n.author || "Owner"}</span><span>${new Date(n.timestamp).toLocaleDateString()}</span></div>
-              <h3 class="font-bold text-amber-300">${n.title}</h3>
-              <p class="text-xs text-slate-300 mt-1">${n.body}</p>
-            </div>`;
-        });
+        newsCache = [];
+        snap.forEach(docSnap => newsCache.push({ id: docSnap.id, ...docSnap.data() }));
+        renderNewsList();
       }, () => {});
+    }
+    function renderNewsList() {
+      const list = document.getElementById("news-list");
+      if (!list) return;
+      if (!newsCache.length) { list.innerHTML = '<p class="text-slate-500 text-xs">No news yet.</p>'; return; }
+      list.innerHTML = newsCache.map(n => `
+        <button onclick="openNewsDetail('${n.id}')" class="w-full text-left bg-slate-950 border border-slate-800 rounded-xl p-3 hover:border-amber-400">
+          <div class="flex justify-between text-[10px] text-slate-500 mb-1"><span>${n.author || "Owner"}</span><span>${new Date(n.timestamp).toLocaleDateString()}</span></div>
+          <h3 class="font-bold text-amber-300">${n.title}</h3>
+          <p class="text-xs text-slate-300 mt-1 line-clamp-2">${n.body}</p>
+          <p class="text-[10px] text-slate-500 mt-2">${(n.likes || []).length} likes · ${(n.comments || []).length} comments</p>
+        </button>`).join("");
+    }
+    function openNewsDetail(id) {
+      const n = newsCache.find(x => x.id === id);
+      if (!n) return;
+      const box = document.getElementById("news-detail");
+      const liked = (n.likes || []).includes(window.currentUserUid);
+      box.classList.remove("hidden");
+      box.innerHTML = `
+        <div class="flex justify-between items-center"><h3 class="font-baseball text-3xl text-amber-300">${n.title}</h3><button onclick="document.getElementById('news-detail').classList.add('hidden')" class="text-slate-400">Close</button></div>
+        <p class="text-[10px] text-slate-500">${n.author || "Owner"} · ${new Date(n.timestamp).toLocaleString()}</p>
+        ${n.image ? `<img src="${n.image}" class="w-full rounded-xl max-h-72 object-cover">` : ""}
+        <p class="text-sm text-slate-200 whitespace-pre-wrap">${n.body}</p>
+        ${n.shopLink ? `<button onclick="switchTab('store')" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs">Go to Shop</button>` : ""}
+        <div class="flex items-center gap-2">
+          <button onclick="toggleNewsLike('${n.id}')" class="text-xs font-bold px-3 py-1 rounded ${liked ? 'bg-red-500 text-white' : 'bg-slate-800 text-slate-200'}">${liked ? 'Liked' : 'Like'} · ${(n.likes || []).length}</button>
+        </div>
+        <div class="space-y-2">${(n.comments || []).map(c => `<div class="bg-slate-900 rounded-lg p-2"><p class="text-[10px] text-amber-300">${c.user}</p><p class="text-xs">${c.text}</p></div>`).join("") || '<p class="text-xs text-slate-500">No comments yet.</p>'}</div>
+        <div class="flex gap-2">
+          <input id="news-comment-${n.id}" placeholder="Write a comment" class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white">
+          <button onclick="addNewsComment('${n.id}')" class="bg-amber-500 text-slate-950 font-bold px-3 rounded-lg text-xs">Send</button>
+        </div>`;
+    }
+    async function toggleNewsLike(id) {
+      const n = newsCache.find(x => x.id === id);
+      if (!n || !window.currentUserUid) return;
+      const likes = n.likes || [];
+      const next = likes.includes(window.currentUserUid) ? likes.filter(x => x !== window.currentUserUid) : likes.concat(window.currentUserUid);
+      await window.updateDoc(window.doc(window.db, "news", id), { likes: next });
+    }
+    async function addNewsComment(id) {
+      const input = document.getElementById("news-comment-" + id);
+      const text = (input?.value || "").trim();
+      if (!text) return;
+      const n = newsCache.find(x => x.id === id);
+      const comments = (n.comments || []).concat({ user: window.currentUsername || "Player", text, timestamp: Date.now() });
+      await window.updateDoc(window.doc(window.db, "news", id), { comments });
+      input.value = "";
     }
 
     function switchTab(tabId) {

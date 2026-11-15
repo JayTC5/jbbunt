@@ -6,9 +6,7 @@
   <title>JB Bunt News Desk</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    .font-baseball { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; }
-  </style>
+  <style>.font-baseball { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; }</style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen font-sans">
   <div class="max-w-xl mx-auto p-6">
@@ -27,6 +25,8 @@
         <p class="text-xs text-emerald-300">Signed in as <span id="who"></span></p>
         <input id="title" placeholder="Title" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
         <textarea id="body" rows="4" placeholder="News update" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
+        <input id="image" placeholder="Photo link (imgur) optional" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
+        <label class="flex items-center gap-2 text-xs text-slate-300"><input id="shop" type="checkbox"> Add a link to the shop</label>
         <button onclick="postNews()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-lg">Post to Game</button>
       </div>
       <div>
@@ -39,7 +39,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAAkxFfbjR_4Q-DLlBWK7yA7ybfwW8Pl8U",
@@ -53,16 +53,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    window._auth = auth;
-    window._db = db;
-    window._signInWithPopup = signInWithPopup;
-    window._GoogleAuthProvider = GoogleAuthProvider;
-    window._addDoc = addDoc;
-    window._collection = collection;
-    window._query = query;
-    window._orderBy = orderBy;
-    window._limit = limit;
-    window._onSnapshot = onSnapshot;
+    let posts = [];
 
     window.signIn = async () => {
       if (document.getElementById("code").value.trim() !== "NUMBER5") {
@@ -70,33 +61,63 @@
         return;
       }
       try {
-        const cred = await window._signInWithPopup(window._auth, new window._GoogleAuthProvider());
+        const cred = await signInWithPopup(auth, new GoogleAuthProvider());
         document.getElementById("gate").classList.add("hidden");
         document.getElementById("desk").classList.remove("hidden");
         document.getElementById("who").textContent = cred.user.email;
-        const q = window._query(window._collection(window._db, "news"), window._orderBy("timestamp", "desc"), window._limit(20));
-        window._onSnapshot(q, (snap) => {
-          const list = document.getElementById("list");
-          list.innerHTML = snap.empty ? '<p class="text-slate-500 text-xs">No posts yet.</p>' : "";
-          snap.forEach(d => {
-            const n = d.data();
-            list.innerHTML += `<div class="bg-slate-900 border border-slate-800 rounded-xl p-3"><p class="font-bold text-amber-300">${n.title}</p><p class="text-xs text-slate-300">${n.body}</p></div>`;
-          });
+        const q = query(collection(db, "news"), orderBy("timestamp", "desc"), limit(20));
+        onSnapshot(q, (snap) => {
+          posts = [];
+          snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
+          render();
         });
       } catch (e) {
         document.getElementById("err").textContent = e.message;
       }
     };
 
+    function render() {
+      const list = document.getElementById("list");
+      list.innerHTML = posts.length ? "" : '<p class="text-slate-500 text-xs">No posts yet.</p>';
+      posts.forEach(n => {
+        list.innerHTML += `
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2">
+            ${n.image ? `<img src="${n.image}" class="w-full h-32 object-cover rounded-lg">` : ""}
+            <p class="font-bold text-amber-300">${n.title}</p>
+            <p class="text-xs text-slate-300">${n.body}</p>
+            <p class="text-[10px] text-slate-500">${n.shopLink ? "Shop link on" : "No shop link"} · ${(n.likes||[]).length} likes</p>
+            <button onclick="editPost('${n.id}')" class="text-[10px] bg-slate-800 px-2 py-1 rounded">Edit</button>
+          </div>`;
+      });
+    }
+
     window.postNews = async () => {
       const title = document.getElementById("title").value.trim();
       const body = document.getElementById("body").value.trim();
+      const image = document.getElementById("image").value.trim();
+      const shopLink = document.getElementById("shop").checked;
       if (!title || !body) return alert("Add a title and a message.");
-      await window._addDoc(window._collection(window._db, "news"), {
-        title, body, timestamp: Date.now(), author: window._auth.currentUser?.email || "Owner"
+      await addDoc(collection(db, "news"), {
+        title, body, image, shopLink, likes: [], comments: [],
+        timestamp: Date.now(), author: auth.currentUser?.email || "Owner"
       });
       document.getElementById("title").value = "";
       document.getElementById("body").value = "";
+      document.getElementById("image").value = "";
+      document.getElementById("shop").checked = false;
+    };
+
+    window.editPost = async (id) => {
+      const n = posts.find(x => x.id === id);
+      if (!n) return;
+      const title = prompt("Title", n.title);
+      if (title === null) return;
+      const body = prompt("Message", n.body);
+      if (body === null) return;
+      const image = prompt("Photo link (blank to remove)", n.image || "");
+      if (image === null) return;
+      const shop = confirm("Add a link to the shop? OK = yes, Cancel = no");
+      await updateDoc(doc(db, "news", id), { title, body, image, shopLink: shop });
     };
   </script>
 </body>
