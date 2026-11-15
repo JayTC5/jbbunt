@@ -91,10 +91,17 @@
       });
     }
 
+    function fixImageUrl(url) {
+      if (!url) return "";
+      let u = url.trim();
+      const m = u.match(/imgur\.com\/(?:a\/|gallery\/)?([A-Za-z0-9]+)/);
+      if (m && !u.includes("i.imgur.com")) u = "https://i.imgur.com/" + m[1] + ".png";
+      return u;
+    }
     window.postNews = async () => {
       const title = document.getElementById("title").value.trim();
       const body = document.getElementById("body").value.trim();
-      const image = document.getElementById("image").value.trim();
+      const image = fixImageUrl(document.getElementById("image").value.trim());
       const shopLink = document.getElementById("shop").checked;
       if (!title || !body) return alert("Add a title and a message.");
       await addDoc(collection(db, "news"), {
@@ -114,8 +121,9 @@
       if (title === null) return;
       const body = prompt("Message", n.body);
       if (body === null) return;
-      const image = prompt("Photo link (blank to remove)", n.image || "");
-      if (image === null) return;
+      const imageRaw = prompt("Photo link (blank to remove)", n.image || "");
+      if (imageRaw === null) return;
+      const image = fixImageUrl(imageRaw);
       const shop = confirm("Add a link to the shop? OK = yes, Cancel = no");
       await updateDoc(doc(db, "news", id), { title, body, image, shopLink: shop });
     };

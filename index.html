@@ -1449,45 +1449,44 @@
         renderNewsList();
       }, () => {});
     }
+    function fixImageUrl(url) {
+      if (!url) return "";
+      let u = url.trim();
+      const m = u.match(/imgur\.com\/(?:a\/|gallery\/)?([A-Za-z0-9]+)/);
+      if (m && !u.includes("i.imgur.com")) u = "https://i.imgur.com/" + m[1] + ".png";
+      if (u.startsWith("http") === false && u) u = "https://" + u;
+      return u;
+    }
     function renderNewsList() {
       const list = document.getElementById("news-list");
       if (!list) return;
       if (!newsCache.length) { list.innerHTML = '<p class="text-slate-500 text-xs">No news yet.</p>'; return; }
-      list.innerHTML = newsCache.map(n => `
-        <button onclick="openNewsDetail('${n.id}')" class="w-full text-left bg-slate-950 border border-slate-800 rounded-xl p-3 hover:border-amber-400">
-          <div class="flex justify-between text-[10px] text-slate-500 mb-1"><span>${n.author || "Owner"}</span><span>${new Date(n.timestamp).toLocaleDateString()}</span></div>
-          <h3 class="font-bold text-amber-300">${n.title}</h3>
-          <p class="text-xs text-slate-300 mt-1 line-clamp-2">${n.body}</p>
-          <p class="text-[10px] text-slate-500 mt-2">${(n.likes || []).length} likes · ${(n.comments || []).length} comments</p>
-        </button>`).join("");
-    }
-    function openNewsDetail(id) {
-      const n = newsCache.find(x => x.id === id);
-      if (!n) return;
-      const box = document.getElementById("news-detail");
-      const liked = (n.likes || []).includes(window.currentUserUid);
-      box.classList.remove("hidden");
-      box.innerHTML = `
-        <div class="flex justify-between items-center"><h3 class="font-baseball text-3xl text-amber-300">${n.title}</h3><button onclick="document.getElementById('news-detail').classList.add('hidden')" class="text-slate-400">Close</button></div>
-        <p class="text-[10px] text-slate-500">${n.author || "Owner"} · ${new Date(n.timestamp).toLocaleString()}</p>
-        ${n.image ? `<img src="${n.image}" class="w-full rounded-xl max-h-72 object-cover">` : ""}
-        <p class="text-sm text-slate-200 whitespace-pre-wrap">${n.body}</p>
-        ${n.shopLink ? `<button onclick="switchTab('store')" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs">Go to Shop</button>` : ""}
-        <div class="flex items-center gap-2">
+      list.innerHTML = newsCache.map(n => {
+        const liked = (n.likes || []).includes(window.currentUserUid);
+        const img = fixImageUrl(n.image);
+        return `
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
+          <div class="flex justify-between items-center"><h3 class="font-baseball text-3xl text-amber-300">${n.title}</h3></div>
+          <p class="text-[10px] text-slate-500">${n.author || "Owner"} · ${new Date(n.timestamp).toLocaleString()}</p>
+          ${img ? `<img src="${img}" class="w-full rounded-xl" onerror="this.style.display='none'">` : ""}
+          <p class="text-sm text-slate-200 whitespace-pre-wrap">${n.body}</p>
+          ${n.shopLink ? `<button onclick="switchTab('store')" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs">Go to Shop</button>` : ""}
           <button onclick="toggleNewsLike('${n.id}')" class="text-xs font-bold px-3 py-1 rounded ${liked ? 'bg-red-500 text-white' : 'bg-slate-800 text-slate-200'}">${liked ? 'Liked' : 'Like'} · ${(n.likes || []).length}</button>
-        </div>
-        <div class="space-y-2">${(n.comments || []).map(c => `<div class="bg-slate-900 rounded-lg p-2"><p class="text-[10px] text-amber-300">${c.user}</p><p class="text-xs">${c.text}</p></div>`).join("") || '<p class="text-xs text-slate-500">No comments yet.</p>'}</div>
-        <div class="flex gap-2">
-          <input id="news-comment-${n.id}" placeholder="Write a comment" class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white">
-          <button onclick="addNewsComment('${n.id}')" class="bg-amber-500 text-slate-950 font-bold px-3 rounded-lg text-xs">Send</button>
+          <div class="space-y-2">${(n.comments || []).map(c => `<div class="bg-slate-900 rounded-lg p-2"><p class="text-[10px] text-amber-300">${c.user}</p><p class="text-xs">${c.text}</p></div>`).join("") || '<p class="text-xs text-slate-500">No comments yet.</p>'}</div>
+          <div class="flex gap-2">
+            <input id="news-comment-${n.id}" placeholder="Write a comment" class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white">
+            <button onclick="addNewsComment('${n.id}')" class="bg-amber-500 text-slate-950 font-bold px-3 rounded-lg text-xs">Send</button>
+          </div>
         </div>`;
+      }).join("");
     }
     async function toggleNewsLike(id) {
       const n = newsCache.find(x => x.id === id);
       if (!n || !window.currentUserUid) return;
       const likes = n.likes || [];
-      const next = likes.includes(window.currentUserUid) ? likes.filter(x => x !== window.currentUserUid) : likes.concat(window.currentUserUid);
-      await window.updateDoc(window.doc(window.db, "news", id), { likes: next });
+      n.likes = likes.includes(window.currentUserUid) ? likes.filter(x => x !== window.currentUserUid) : likes.concat(window.currentUserUid);
+      renderNewsList();
+      window.updateDoc(window.doc(window.db, "news", id), { likes: n.likes });
     }
     async function addNewsComment(id) {
       const input = document.getElementById("news-comment-" + id);
