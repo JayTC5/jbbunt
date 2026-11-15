@@ -11,16 +11,18 @@
 <body class="bg-slate-950 text-white min-h-screen font-sans">
   <div class="max-w-xl mx-auto p-6">
     <h1 class="font-baseball text-5xl text-amber-400">JB Bunt News Desk</h1>
-    <p class="text-xs text-slate-400 mb-6">Posts here show up in the game automatically.</p>
+    <p class="text-xs text-slate-400 mb-6">Open this from your website link, not as a downloaded file.</p>
 
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+      <button id="signin-btn" class="w-full bg-white text-slate-950 font-extrabold py-2 rounded-lg">1. Sign in with Google</button>
+      <p id="who" class="text-xs text-emerald-300"></p>
       <input id="author" placeholder="Post as (name people will see)" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
       <input id="title" placeholder="Title" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
       <textarea id="body" rows="4" placeholder="News update" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
       <input id="image" placeholder="Photo link (imgur) optional" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
       <label class="flex items-center gap-2 text-xs text-slate-300"><input id="shop" type="checkbox"> Add a link to the shop</label>
-      <button onclick="postNews()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-lg">Post to Game</button>
-      <p id="err" class="text-red-400 text-xs"></p>
+      <button id="post-btn" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-lg">2. Post to Game</button>
+      <p id="status" class="text-sm text-amber-200 min-h-[1.25rem]"></p>
     </div>
 
     <div class="mt-4">
@@ -31,8 +33,15 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const status = document.getElementById("status");
+    const say = (msg) => { status.textContent = msg; };
+
+    if (location.protocol === "file:") {
+      say("Open this page from your GitHub site link. It will not work as a file on your computer.");
+    }
 
     const firebaseConfig = {
       apiKey: "AIzaSyAAkxFfbjR_4Q-DLlBWK7yA7ybfwW8Pl8U",
@@ -48,52 +57,64 @@
     const db = getFirestore(app);
     let posts = [];
 
-    const q = query(collection(db, "news"), orderBy("timestamp", "desc"), limit(20));
-    onSnapshot(q, (snap) => {
-      posts = [];
-      snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
-      render();
-    }, () => {});
+    function fixImageUrl(url) {
+      if (!url) return "";
+      let u = url.trim();
+      const m = u.match(/imgur\.com\/(?:a\/|gallery\/)?([A-Za-z0-9]+)/);
+      if (m && !u.includes("i.imgur.com")) u = "https://i.imgur.com/" + m[1] + ".png";
+      return u;
+    }
 
     function render() {
       const list = document.getElementById("list");
       list.innerHTML = posts.length ? "" : '<p class="text-slate-500 text-xs">No posts yet.</p>';
       posts.forEach(n => {
-        list.innerHTML += `
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2">
-            ${n.image ? `<img src="${n.image}" class="w-40 h-40 object-cover rounded-lg">` : ""}
-            <p class="font-bold text-amber-300">${n.title}</p>
-            <p class="text-[10px] text-slate-500">by ${n.author || "Owner"}</p>
-            <p class="text-xs text-slate-300">${n.body}</p>
-            <p class="text-[10px] text-slate-500">${n.shopLink ? "Shop link on" : "No shop link"} · ${(n.likes||[]).length} likes</p>
-            <button onclick="editPost('${n.id}')" class="text-[10px] bg-slate-800 px-2 py-1 rounded">Edit</button>
-            <button onclick="deletePost('${n.id}')" class="text-[10px] bg-red-600/40 text-red-200 px-2 py-1 rounded">Delete</button>
-          </div>`;
+        const row = document.createElement("div");
+        row.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2";
+        row.innerHTML = `
+          ${n.image ? `<img src="${n.image}" class="w-40 h-40 object-cover rounded-lg">` : ""}
+          <p class="font-bold text-amber-300">${n.title || ""}</p>
+          <p class="text-[10px] text-slate-500">by ${n.author || "Owner"}</p>
+          <p class="text-xs text-slate-300">${n.body || ""}</p>
+          <p class="text-[10px] text-slate-500">${n.shopLink ? "Shop link on" : "No shop link"} · ${(n.likes || []).length} likes</p>`;
+        const edit = document.createElement("button");
+        edit.className = "text-[10px] bg-slate-800 px-2 py-1 rounded mr-1";
+        edit.textContent = "Edit";
+        edit.onclick = () => editPost(n.id);
+        const del = document.createElement("button");
+        del.className = "text-[10px] bg-red-600/40 text-red-200 px-2 py-1 rounded";
+        del.textContent = "Delete";
+        del.onclick = () => deletePost(n.id);
+        row.appendChild(edit);
+        row.appendChild(del);
+        list.appendChild(row);
       });
     }
 
-    function fixImageUrl(url) {
-      if (!url) return "";
-      let u = url.trim();
-      const m = u.match(/imgur\\.com\\/(?:a\\/|gallery\\/)?([A-Za-z0-9]+)/);
-      if (m && !u.includes("i.imgur.com")) u = "https://i.imgur.com/" + m[1] + ".png";
-      return u;
-    }
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById("who").textContent = user ? "Signed in as " + (user.email || user.uid) : "Not signed in yet.";
+    });
 
-    async function ensureAuth() {
-      if (auth.currentUser) return;
-      await signInWithPopup(auth, new GoogleAuthProvider());
-    }
+    document.getElementById("signin-btn").onclick = async () => {
+      try {
+        say("Opening Google...");
+        await signInWithPopup(auth, new GoogleAuthProvider());
+        say("Signed in. You can post now.");
+      } catch (e) {
+        say(e.code ? e.code + ": " + e.message : e.message);
+      }
+    };
 
-    window.postNews = async () => {
+    document.getElementById("post-btn").onclick = async () => {
       const author = document.getElementById("author").value.trim() || "Owner";
       const title = document.getElementById("title").value.trim();
       const body = document.getElementById("body").value.trim();
       const image = fixImageUrl(document.getElementById("image").value.trim());
       const shopLink = document.getElementById("shop").checked;
-      if (!title || !body) return alert("Add a title and a message.");
+      if (!title || !body) { say("Add a title and a message."); return; }
+      if (!auth.currentUser) { say("Tap Sign in with Google first."); return; }
       try {
-        await ensureAuth();
+        say("Saving...");
         await addDoc(collection(db, "news"), {
           title, body, image, shopLink, likes: [], comments: [],
           timestamp: Date.now(), author
@@ -102,41 +123,56 @@
         document.getElementById("body").value = "";
         document.getElementById("image").value = "";
         document.getElementById("shop").checked = false;
-        document.getElementById("err").textContent = "";
+        say("Posted! It should show in the game.");
       } catch (e) {
-        document.getElementById("err").textContent = e.message;
+        say(e.code ? e.code + ": " + e.message : e.message);
       }
     };
 
-    window.editPost = async (id) => {
+    async function editPost(id) {
       const n = posts.find(x => x.id === id);
       if (!n) return;
+      if (!auth.currentUser) { say("Sign in first."); return; }
       const author = prompt("Post as", n.author || "Owner");
       if (author === null) return;
-      const title = prompt("Title", n.title);
+      const title = prompt("Title", n.title || "");
       if (title === null) return;
-      const body = prompt("Message", n.body);
+      const body = prompt("Message", n.body || "");
       if (body === null) return;
       const imageRaw = prompt("Photo link (blank to remove)", n.image || "");
       if (imageRaw === null) return;
-      const image = fixImageUrl(imageRaw);
       const shop = confirm("Add a link to the shop? OK = yes, Cancel = no");
       try {
-        await ensureAuth();
-        await updateDoc(doc(db, "news", id), { author, title, body, image, shopLink: shop });
+        await updateDoc(doc(db, "news", id), { author, title, body, image: fixImageUrl(imageRaw), shopLink: shop });
+        say("Updated.");
       } catch (e) {
-        document.getElementById("err").textContent = e.message;
+        say(e.message);
       }
-    };
-    window.deletePost = async (id) => {
+    }
+
+    async function deletePost(id) {
       if (!confirm("Delete this post?")) return;
+      if (!auth.currentUser) { say("Sign in first."); return; }
       try {
-        await ensureAuth();
         await deleteDoc(doc(db, "news", id));
+        say("Deleted.");
       } catch (e) {
-        document.getElementById("err").textContent = e.message;
+        say(e.message);
       }
-    };
+    }
+
+    try {
+      const q = query(collection(db, "news"), orderBy("timestamp", "desc"), limit(20));
+      onSnapshot(q, (snap) => {
+        posts = [];
+        snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
+        render();
+      }, (e) => say("Could not load posts: " + e.message));
+    } catch (e) {
+      say(e.message);
+    }
+
+    say("Ready. Sign in, then post.");
   </script>
 </body>
 </html>
