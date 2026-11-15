@@ -253,6 +253,7 @@
         }, { merge: true });
 
         initTradeListeners();
+        initNewsListener();
         initTradeFeedListener();
         seedBots().then(() => startBotLoop());
         initMarketplaceListener();
@@ -683,6 +684,9 @@
       <button onclick="switchTab('social')" id="nav-btn-social" class="nav-tab flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-slate-800 hover:bg-slate-700 text-slate-300">
         <i class="fa-solid fa-store"></i> Market & Trades
       </button>
+      <button onclick="switchTab('news')" id="nav-btn-news" class="nav-tab flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-slate-800 hover:bg-slate-700 text-slate-300">
+        <i class="fa-solid fa-newspaper"></i> News
+      </button>
       <button onclick="switchTab('missions')" id="nav-btn-missions" class="nav-tab flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-slate-800 hover:bg-slate-700 text-slate-300">
         <i class="fa-solid fa-list-check"></i> Missions & Sets
       </button>
@@ -730,6 +734,27 @@
           <i class="fa-solid fa-store"></i> Main Store
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <!-- NEWSLETTER -->
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-500">
+                <i class="fa-solid fa-newspaper text-2xl text-slate-200"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-slate-200">Newsletter</h3><button onclick="showPackOdds('newsletter')" class="text-[10px] bg-slate-900 border border-slate-600 px-2 py-0.5 rounded-full text-slate-200 hover:text-white">Info</button></div>
+                <p class="text-xs text-slate-400">Witt, Bichette, Betts, Alvarez, Peters, Freeman, Adell, PCA, Turang, Rice</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="buyPack('newsletter_std')" class="flex-1 bg-slate-900 hover:bg-slate-800 font-bold py-2 rounded-lg text-xs border border-slate-600">
+                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>400 Coins</span>
+              </button>
+              <button onclick="buyPack('newsletter_super')" class="flex-1 bg-gradient-to-r from-slate-600 to-slate-400 font-extrabold py-2 rounded-lg text-xs shadow-lg">
+                SUPER (4 UC, 2 R)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
+              </button>
+            </div>
+          </div>
+
           <!-- BLACKOUT -->
           <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
             <div class="flex items-center gap-3">
@@ -974,6 +999,25 @@
     </section>
 
     <!-- TAB 4: MISSIONS & SETS PANEL -->
+    <section id="tab-news" class="tab-page hidden">
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+        <h2 class="font-baseball text-3xl mb-4 text-amber-400"><i class="fa-solid fa-newspaper mr-2"></i>News</h2>
+        <div id="news-list" class="space-y-3"></div>
+        <div class="mt-4 border-t border-slate-800 pt-4">
+          <p class="text-[11px] text-slate-400 mb-2">Owner only. Enter the code to post.</p>
+          <div class="flex gap-2 mb-2">
+            <input id="news-code" type="password" placeholder="Owner code" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+            <button onclick="unlockNewsPost()" class="bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs">Unlock</button>
+          </div>
+          <div id="news-post-box" class="hidden space-y-2">
+            <input id="news-title" placeholder="Title" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white">
+            <textarea id="news-body" rows="3" placeholder="News update" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white"></textarea>
+            <button onclick="postNews()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-lg text-xs">Post News</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="tab-missions" class="tab-page hidden grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- MISSIONS CENTER -->
       <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
@@ -1204,6 +1248,28 @@
       1703: { id: 1703, name: "Paul Skenes", rarity: "Iconic", set: "Signature Series 1", image: "https://imgur.com/RWyumDP.png" },
       1704: { id: 1704, name: "Paul Skenes", rarity: "Legendary", set: "Signature Series 1", image: "https://imgur.com/GShDX7Z.png" },
 
+      // NEWSLETTER
+      1801: { id: 1801, name: "Bobby Witt Jr", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/xvsQWdv.png" },
+      1802: { id: 1802, name: "Bo Bichette", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/E7BZBar.png" },
+      1803: { id: 1803, name: "Mookie Betts", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/Sif40ib.png" },
+      1804: { id: 1804, name: "Yordan Alvarez", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/FGqmPHH.png" },
+      1805: { id: 1805, name: "Tristan Peters", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/tfsHKR2.png" },
+      1806: { id: 1806, name: "Freddie Freeman", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/4xqrUM7.png" },
+      1807: { id: 1807, name: "Jo Adell", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/wM4fURa.png" },
+      1808: { id: 1808, name: "Pete Crow-Armstrong", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/igP7Ue7.png" },
+      1809: { id: 1809, name: "Brice Turang", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/KWALcPh.png" },
+      1810: { id: 1810, name: "Ben Rice", rarity: "Uncommon", set: "Newsletter", image: "https://imgur.com/cDbuKKQ.png" },
+      1821: { id: 1821, name: "Bobby Witt Jr", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/x9znvls.png" },
+      1822: { id: 1822, name: "Bo Bichette", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/g7VoGGX.png" },
+      1823: { id: 1823, name: "Mookie Betts", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/ZfAqv24.png" },
+      1824: { id: 1824, name: "Yordan Alvarez", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/hUWNvKu.png" },
+      1825: { id: 1825, name: "Tristan Peters", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/H26neCd.png" },
+      1826: { id: 1826, name: "Freddie Freeman", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/pTmB8iW.png" },
+      1827: { id: 1827, name: "Jo Adell", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/1l1JqPx.png" },
+      1828: { id: 1828, name: "Pete Crow-Armstrong", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/z8CvUtP.png" },
+      1829: { id: 1829, name: "Brice Turang", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/eOWb4Lg.png" },
+      1830: { id: 1830, name: "Ben Rice", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/9i25ybe.png" },
+
       // GRAND SLAM
       1302: { id: 1302, name: "Junior Caminero", rarity: "SuperRare", set: "Grand Slam", image: "https://imgur.com/ybBVLkw.png" },
       1303: { id: 1303, name: "Junior Caminero", rarity: "Iconic", set: "Grand Slam", image: "https://imgur.com/uqR6x4Z.png" },
@@ -1225,7 +1291,8 @@
       apex: { name: "Apex", rewardCardId: null, requiredIds: [1401, 1402, 1403, 1411, 1412, 1413, 1421, 1422, 1423, 1431, 1432, 1433, 1441, 1442, 1443, 1451, 1452, 1453, 1461, 1462, 1463, 1471, 1472, 1473] },
       cycle: { name: "Cycle", rewardCardId: null, requiredIds: [1501, 1502, 1503, 1504] },
       veterans: { name: "Veterans Day", rewardCardId: null, requiredIds: [1601, 1602, 1603, 1604, 1605, 1606, 1611, 1612, 1613, 1614, 1615, 1616, 1621, 1622, 1623, 1624, 1625, 1626, 1631, 1632, 1633, 1634, 1635, 1636] },
-      signature: { name: "Signature Series 1", rewardCardId: null, requiredIds: [1701, 1702, 1703, 1704] }
+      signature: { name: "Signature Series 1", rewardCardId: null, requiredIds: [1701, 1702, 1703, 1704] },
+      newsletter: { name: "Newsletter", rewardCardId: null, requiredIds: [1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 1809, 1810, 1821, 1822, 1823, 1824, 1825, 1826, 1827, 1828, 1829, 1830] }
     };
 
     const MISSIONS_CONFIG = {
@@ -1304,6 +1371,8 @@
     const SIG_SR_IDS = [1702];
     const SIG_ICONIC_IDS = [1703];
     const SIG_LEG_IDS = [1704];
+    const NEWS_UC_IDS = [1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 1809, 1810];
+    const NEWS_RARE_IDS = [1821, 1822, 1823, 1824, 1825, 1826, 1827, 1828, 1829, 1830];
     const DIAMOND_UC_IDS = [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212];
     const SUPERSTARS_RARE_IDS = [301, 302, 303, 304, 305];
     const SUPERNOVA_SR_IDS = [401, 402, 403, 404, 405];
@@ -1382,6 +1451,40 @@
     }
 
     /* NAV TAB SWITCHING */
+    function unlockNewsPost() {
+      if (document.getElementById("news-code").value.trim() !== "NUMBER5") return alert("Wrong code.");
+      document.getElementById("news-post-box").classList.remove("hidden");
+    }
+    async function postNews() {
+      const title = document.getElementById("news-title").value.trim();
+      const body = document.getElementById("news-body").value.trim();
+      if (!title || !body) return alert("Add a title and a message.");
+      await window.addDoc(window.collection(window.db, "news"), {
+        title, body, timestamp: Date.now(), author: window.currentUsername || "Owner"
+      });
+      document.getElementById("news-title").value = "";
+      document.getElementById("news-body").value = "";
+      showNotification("News posted!");
+    }
+    function initNewsListener() {
+      const qNews = window.query(window.collection(window.db, "news"), window.orderBy("timestamp", "desc"), window.limit(20));
+      window.onSnapshot(qNews, (snap) => {
+        const list = document.getElementById("news-list");
+        if (!list) return;
+        if (snap.empty) { list.innerHTML = '<p class="text-slate-500 text-xs">No news yet.</p>'; return; }
+        list.innerHTML = "";
+        snap.forEach(docSnap => {
+          const n = docSnap.data();
+          list.innerHTML += `
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+              <div class="flex justify-between text-[10px] text-slate-500 mb-1"><span>${n.author || "Owner"}</span><span>${new Date(n.timestamp).toLocaleDateString()}</span></div>
+              <h3 class="font-bold text-amber-300">${n.title}</h3>
+              <p class="text-xs text-slate-300 mt-1">${n.body}</p>
+            </div>`;
+        });
+      }, () => {});
+    }
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
       document.querySelectorAll('.nav-tab').forEach(btn => {
@@ -2357,6 +2460,11 @@
         "1 in 5 Rare, 1 in 10 Super Rare, 1 in 30 Iconic, 1 in 100 Legendary.",
         "Super (250 diamonds): 1 Rare, 1 Super Rare, 1 in 3 Iconic, 1 in 10 Legendary."
       ],
+      newsletter: [
+        "Standard (400 coins): 1 Newsletter Uncommon.",
+        "1 in 5 Rare.",
+        "Super (250 diamonds): 4 Uncommons and 2 Rares."
+      ],
       legacy: [
         "Standard (500 coins): 5 cards.",
         "1 in 3 Legacy Rare.",
@@ -2463,6 +2571,8 @@
       else if (packVariant === 'veterans_super') costDiamonds = 250;
       else if (packVariant === 'signature_std') costCoins = 450;
       else if (packVariant === 'signature_super') costDiamonds = 250;
+      else if (packVariant === 'newsletter_std') costCoins = 400;
+      else if (packVariant === 'newsletter_super') costDiamonds = 250;
       else if (packVariant === 'blackout_super') costDiamonds = 300;
 
       if (userCoins < costCoins) return alert("Not enough coins!");
@@ -2530,6 +2640,17 @@
           getRandom(COMMON_IDS), getRandom(COMMON_IDS)
         ];
         if (Math.random() < 1/5) pendingPackPulledCards[3] = getRandom(GEM_LEGENDARY_IDS);
+      } else if (packVariant === 'newsletter_std') {
+        pendingPackPulledCards = [
+          getRandom(NEWS_UC_IDS),
+          getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
+        ];
+        if (Math.random() < 1/5) pendingPackPulledCards[1] = getRandom(NEWS_RARE_IDS);
+      } else if (packVariant === 'newsletter_super') {
+        pendingPackPulledCards = [
+          getRandom(NEWS_UC_IDS), getRandom(NEWS_UC_IDS), getRandom(NEWS_UC_IDS), getRandom(NEWS_UC_IDS),
+          getRandom(NEWS_RARE_IDS), getRandom(NEWS_RARE_IDS)
+        ];
       } else if (packVariant === 'signature_std') {
         pendingPackPulledCards = [
           getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
@@ -2697,6 +2818,13 @@
         pRightTitle.textContent = "STONES";
         pLeftIcon.innerHTML = `<i class="fa-solid fa-gem text-4xl text-amber-300"></i>`;
         pRightIcon.innerHTML = `<i class="fa-solid fa-gem text-4xl text-yellow-300"></i>`;
+      } else if (packType === 'newsletter') {
+        pLeft.classList.add('pack-foil-blackout');
+        pRight.classList.add('pack-foil-blackout');
+        pLeftTitle.textContent = "NEWS";
+        pRightTitle.textContent = "LETTER";
+        pLeftIcon.innerHTML = `<i class="fa-solid fa-newspaper text-4xl text-slate-200"></i>`;
+        pRightIcon.innerHTML = `<i class="fa-solid fa-newspaper text-4xl text-amber-200"></i>`;
       } else if (packType === 'signature') {
         pLeft.classList.add('pack-foil-legacy');
         pRight.classList.add('pack-foil-legacy');
