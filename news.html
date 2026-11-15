@@ -32,7 +32,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, doc, updateDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAAkxFfbjR_4Q-DLlBWK7yA7ybfwW8Pl8U",
@@ -67,6 +67,7 @@
             <p class="text-xs text-slate-300">${n.body}</p>
             <p class="text-[10px] text-slate-500">${n.shopLink ? "Shop link on" : "No shop link"} · ${(n.likes||[]).length} likes</p>
             <button onclick="editPost('${n.id}')" class="text-[10px] bg-slate-800 px-2 py-1 rounded">Edit</button>
+            <button onclick="deletePost('${n.id}')" class="text-[10px] bg-red-600/40 text-red-200 px-2 py-1 rounded">Delete</button>
           </div>`;
       });
     }
@@ -123,6 +124,15 @@
       try {
         await ensureAuth();
         await updateDoc(doc(db, "news", id), { author, title, body, image, shopLink: shop });
+      } catch (e) {
+        document.getElementById("err").textContent = e.message;
+      }
+    };
+    window.deletePost = async (id) => {
+      if (!confirm("Delete this post?")) return;
+      try {
+        await ensureAuth();
+        await deleteDoc(doc(db, "news", id));
       } catch (e) {
         document.getElementById("err").textContent = e.message;
       }
