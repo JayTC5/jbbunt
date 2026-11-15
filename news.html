@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JB Bunt News Desk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .font-baseball { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen font-sans">
+  <div class="max-w-xl mx-auto p-6">
+    <h1 class="font-baseball text-5xl text-amber-400">JB Bunt News Desk</h1>
+    <p class="text-xs text-slate-400 mb-6">Posts here show up in the game automatically.</p>
+
+    <div id="gate" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+      <p class="text-sm text-slate-300">Owner code, then Google sign-in.</p>
+      <input id="code" type="password" placeholder="Owner code" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
+      <button onclick="signIn()" class="w-full bg-white text-slate-950 font-extrabold py-2 rounded-lg">Sign in with Google</button>
+      <p id="err" class="text-red-400 text-xs"></p>
+    </div>
+
+    <div id="desk" class="hidden space-y-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+        <p class="text-xs text-emerald-300">Signed in as <span id="who"></span></p>
+        <input id="title" placeholder="Title" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
+        <textarea id="body" rows="4" placeholder="News update" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
+        <button onclick="postNews()" class="w-full bg-amber-500 text-slate-950 font-extrabold py-2 rounded-lg">Post to Game</button>
+      </div>
+      <div>
+        <h2 class="font-bold text-amber-300 mb-2">Live posts</h2>
+        <div id="list" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAAkxFfbjR_4Q-DLlBWK7yA7ybfwW8Pl8U",
+      authDomain: "jbbunt26.firebaseapp.com",
+      projectId: "jbbunt26",
+      storageBucket: "jbbunt26.firebasestorage.app",
+      messagingSenderId: "583905105072",
+      appId: "1:583905105072:web:c5f0826de9af9735f49775"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    window._auth = auth;
+    window._db = db;
+    window._signInWithPopup = signInWithPopup;
+    window._GoogleAuthProvider = GoogleAuthProvider;
+    window._addDoc = addDoc;
+    window._collection = collection;
+    window._query = query;
+    window._orderBy = orderBy;
+    window._limit = limit;
+    window._onSnapshot = onSnapshot;
+
+    window.signIn = async () => {
+      if (document.getElementById("code").value.trim() !== "NUMBER5") {
+        document.getElementById("err").textContent = "Wrong code.";
+        return;
+      }
+      try {
+        const cred = await window._signInWithPopup(window._auth, new window._GoogleAuthProvider());
+        document.getElementById("gate").classList.add("hidden");
+        document.getElementById("desk").classList.remove("hidden");
+        document.getElementById("who").textContent = cred.user.email;
+        const q = window._query(window._collection(window._db, "news"), window._orderBy("timestamp", "desc"), window._limit(20));
+        window._onSnapshot(q, (snap) => {
+          const list = document.getElementById("list");
+          list.innerHTML = snap.empty ? '<p class="text-slate-500 text-xs">No posts yet.</p>' : "";
+          snap.forEach(d => {
+            const n = d.data();
+            list.innerHTML += `<div class="bg-slate-900 border border-slate-800 rounded-xl p-3"><p class="font-bold text-amber-300">${n.title}</p><p class="text-xs text-slate-300">${n.body}</p></div>`;
+          });
+        });
+      } catch (e) {
+        document.getElementById("err").textContent = e.message;
+      }
+    };
+
+    window.postNews = async () => {
+      const title = document.getElementById("title").value.trim();
+      const body = document.getElementById("body").value.trim();
+      if (!title || !body) return alert("Add a title and a message.");
+      await window._addDoc(window._collection(window._db, "news"), {
+        title, body, timestamp: Date.now(), author: window._auth.currentUser?.email || "Owner"
+      });
+      document.getElementById("title").value = "";
+      document.getElementById("body").value = "";
+    };
+  </script>
+</body>
+</html>
