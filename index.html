@@ -255,7 +255,8 @@
         initTradeListeners();
         initNewsListener();
         initTradeFeedListener();
-        seedBots().then(() => startBotLoop());
+        startPresence();
+        initMessagesListener();
         initMarketplaceListener();
         startTimers();
         initWheelCanvas();
@@ -996,6 +997,22 @@
           <input id="players-search" oninput="renderPlayersBrowser()" placeholder="Search username" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white mb-3">
           <div id="players-list" class="space-y-2 max-h-80 overflow-y-auto pr-1">
             <p class="text-slate-500 text-xs italic text-center py-4">Loading players...</p>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+          <h2 class="font-baseball text-3xl text-amber-400 mb-3"><i class="fa-solid fa-envelope mr-2"></i>Messages</h2>
+          <div id="message-inbox" class="space-y-2 max-h-40 overflow-y-auto mb-3"></div>
+          <div id="message-thread" class="hidden space-y-2">
+            <div class="flex justify-between items-center">
+              <p id="message-with" class="text-sm font-bold text-amber-300"></p>
+              <button onclick="closeMessage()" class="text-[10px] text-slate-400">Close</button>
+            </div>
+            <div id="message-log" class="space-y-1 max-h-48 overflow-y-auto bg-slate-950 rounded-xl p-2"></div>
+            <div class="flex gap-2">
+              <input id="message-input" placeholder="Type a message" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white">
+              <button onclick="sendMessage()" class="bg-amber-500 text-slate-950 font-bold px-3 rounded-lg text-xs">Send</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1913,7 +1930,8 @@
         snap.forEach(docSnap => {
           const d = docSnap.data();
           if (!d.username) return;
-          playersCache.push({ username: d.username, cards: (d.collection || []).length, bot: String(docSnap.id).startsWith("bot_") });
+          if (String(docSnap.id).startsWith("bot_")) return;
+          playersCache.push({ uid: docSnap.id, username: d.username, cards: (d.collection || []).length, lastSeen: d.lastSeen || 0 });
         });
         renderPlayersBrowser();
       }, () => {});
@@ -1935,13 +1953,15 @@
       }
       list.innerHTML = rows.map(p => {
         const following = userFollowing.some(n => n.toLowerCase() === p.username.toLowerCase());
+        const online = Date.now() - (p.lastSeen || 0) < 45000;
         return `
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
             <div>
-              <p class="font-bold text-amber-300 text-sm">${p.username} ${p.bot ? '<span class="text-[9px] text-slate-500">BOT</span>' : ''}</p>
-              <p class="text-[10px] text-slate-500">${p.cards} cards</p>
+              <p class="font-bold text-amber-300 text-sm">${p.username}</p>
+              <p class="text-[10px] ${online ? 'text-emerald-400' : 'text-slate-500'}">${online ? 'Online' : 'Offline'} · ${p.cards} cards</p>
             </div>
             <div class="flex gap-1">
+              <button onclick="openMessage('${p.uid}','${p.username}')" class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">Message</button>
               <button onclick="toggleFollow('${p.username}')" class="text-[10px] ${following ? 'bg-slate-800 text-slate-300' : 'bg-cyan-500/20 text-cyan-300'} px-2 py-1 rounded">${following ? 'Unfollow' : 'Follow'}</button>
               <button onclick="quickTradeWithUser('${p.username}')" class="text-[10px] bg-amber-500 text-slate-950 font-bold px-2 py-1 rounded">Trade</button>
             </div>
@@ -3280,6 +3300,85 @@
       window.botLoopStarted = true;
       runBotTick();
       setInterval(runBotTick, 60 * 1000);
+    }
+
+    function startPresence() {
+      const ping = () => {
+        if (!window.currentUserUid) return;
+        window.updateDoc(window.doc(window.db, "users", window.currentUserUid), { lastSeen: Date.now() }).catch(() => {});
+      };
+      ping();
+      setInterval(ping, 20000);
+    }
+
+    let messagesCache = [];
+    let messageTarget = null;
+    function initMessagesListener() {
+      window.onSnapshot(window.collection(window.db, "messages"), (snap) => {
+        messagesCache = [];
+        snap.forEach(d => messagesCache.push({ id: d.id, ...d.data() }));
+        renderInbox();
+        if (messageTarget) renderThread();
+      }, () => {});
+    }
+    function myMessages() {
+      const me = window.currentUserUid;
+      return messagesCache.filter(m => m.fromUid === me || m.toUid === me);
+    }
+    function renderInbox() {
+      const box = document.getElementById("message-inbox");
+      if (!box) return;
+      const me = window.currentUserUid;
+      const names = {};
+      myMessages().forEach(m => {
+        const other = m.fromUid === me ? m.toName : m.fromName;
+        const otherUid = m.fromUid === me ? m.toUid : m.fromUid;
+        if (!names[otherUid] || m.timestamp > names[otherUid].timestamp) names[otherUid] = { name: other, timestamp: m.timestamp };
+      });
+      const rows = Object.entries(names).sort((a, b) => b[1].timestamp - a[1].timestamp);
+      box.innerHTML = rows.length ? rows.map(([uid, info]) => `
+        <button onclick="openMessage('${uid}','${info.name}')" class="w-full text-left bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs">
+          <span class="text-amber-300 font-bold">${info.name}</span>
+        </button>`).join("") : '<p class="text-slate-500 text-xs">No messages yet.</p>';
+    }
+    function openMessage(uid, name) {
+      messageTarget = { uid, name };
+      document.getElementById("message-thread").classList.remove("hidden");
+      document.getElementById("message-with").textContent = name;
+      renderThread();
+    }
+    function closeMessage() {
+      messageTarget = null;
+      document.getElementById("message-thread").classList.add("hidden");
+    }
+    function renderThread() {
+      const log = document.getElementById("message-log");
+      if (!log || !messageTarget) return;
+      const me = window.currentUserUid;
+      const rows = myMessages().filter(m =>
+        (m.fromUid === me && m.toUid === messageTarget.uid) ||
+        (m.fromUid === messageTarget.uid && m.toUid === me)
+      ).sort((a, b) => a.timestamp - b.timestamp);
+      log.innerHTML = rows.length ? rows.map(m => `
+        <div class="text-xs ${m.fromUid === me ? 'text-right' : ''}">
+          <span class="inline-block bg-slate-800 rounded-lg px-2 py-1">${m.text}</span>
+        </div>`).join("") : '<p class="text-slate-500 text-xs">Say hi!</p>';
+      log.scrollTop = log.scrollHeight;
+    }
+    async function sendMessage() {
+      if (!messageTarget) return;
+      const input = document.getElementById("message-input");
+      const textMsg = (input.value || "").trim();
+      if (!textMsg) return;
+      await window.addDoc(window.collection(window.db, "messages"), {
+        fromUid: window.currentUserUid,
+        fromName: window.currentUsername || "Player",
+        toUid: messageTarget.uid,
+        toName: messageTarget.name,
+        text: textMsg,
+        timestamp: Date.now()
+      });
+      input.value = "";
     }
 
     function renderFollowing() {
