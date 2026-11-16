@@ -1284,6 +1284,34 @@
       1829: { id: 1829, name: "Brice Turang", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/eOWb4Lg.png" },
       1830: { id: 1830, name: "Ben Rice", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/9i25ybe.png" },
 
+      // FUTURE BASE VARIANTS (not in packs yet)
+      1901: { id: 1901, name: "Paul Skenes", rarity: "Uncommon", set: "Base", image: "https://imgur.com/fOcTx3q.png" },
+      1902: { id: 1902, name: "Chandler Simpson", rarity: "Uncommon", set: "Base", image: "https://imgur.com/34OdEAY.png" },
+      1911: { id: 1911, name: "Paul Skenes", rarity: "Rare", set: "Blue Base", image: "https://imgur.com/FNNAYh4.png" },
+      1912: { id: 1912, name: "Chandler Simpson", rarity: "Rare", set: "Blue Base", image: "https://imgur.com/LqkLLhU.png" },
+      1921: { id: 1921, name: "Paul Skenes", rarity: "Rare", set: "Base Signature", image: "https://imgur.com/r1hTbw6.png" },
+      1922: { id: 1922, name: "Chandler Simpson", rarity: "Rare", set: "Base Signature", image: "https://imgur.com/Airpaap.png" },
+      1931: { id: 1931, name: "Paul Skenes", rarity: "SuperRare", set: "Blue Base Signature", image: "https://imgur.com/UgRzSF4.png" },
+      1932: { id: 1932, name: "Chandler Simpson", rarity: "SuperRare", set: "Blue Base Signature", image: "https://imgur.com/vhTuPdY.png" },
+      1941: { id: 1941, name: "Paul Skenes", rarity: "SuperRare", set: "Purple Base", image: "https://imgur.com/hBic3DQ.png" },
+      1942: { id: 1942, name: "Chandler Simpson", rarity: "SuperRare", set: "Purple Base", image: "https://imgur.com/mFzYzXF.png" },
+      1951: { id: 1951, name: "Paul Skenes", rarity: "SuperRare", set: "Moon Landing", image: "https://imgur.com/ccH4Pp5.png" },
+      1952: { id: 1952, name: "Chandler Simpson", rarity: "SuperRare", set: "Moon Landing", image: "https://imgur.com/cAaOYyd.png" },
+      1961: { id: 1961, name: "Paul Skenes", rarity: "SuperRare", set: "Earth's Greatest", image: "https://imgur.com/BMXUYDx.png" },
+      1962: { id: 1962, name: "Chandler Simpson", rarity: "SuperRare", set: "Earth's Greatest", image: "https://imgur.com/Dr9l3gi.png" },
+      1971: { id: 1971, name: "Paul Skenes", rarity: "Iconic", set: "Black Base", image: "https://imgur.com/hZHQQnk.png" },
+      1972: { id: 1972, name: "Chandler Simpson", rarity: "Iconic", set: "Black Base", image: "https://imgur.com/OeQ22Kq.png" },
+      1981: { id: 1981, name: "Paul Skenes", rarity: "Iconic", set: "Stargazing", image: "https://imgur.com/nxTW2jP.png" },
+      1982: { id: 1982, name: "Chandler Simpson", rarity: "Iconic", set: "Stargazing", image: "https://imgur.com/oynNCfi.png" },
+      1991: { id: 1991, name: "Paul Skenes", rarity: "Iconic", set: "Purple Base Signature", image: "https://imgur.com/xqQZlmP.png" },
+      1992: { id: 1992, name: "Chandler Simpson", rarity: "Iconic", set: "Purple Base Signature", image: "https://imgur.com/DU3I3vj.png" },
+      2001: { id: 2001, name: "Paul Skenes", rarity: "Iconic", set: "Moon Landing Signature", image: "https://imgur.com/PaCveSp.png" },
+      2002: { id: 2002, name: "Chandler Simpson", rarity: "Iconic", set: "Moon Landing Signature", image: "https://imgur.com/p5q6sVv.png" },
+      2011: { id: 2011, name: "Paul Skenes", rarity: "Legendary", set: "Black Base Signature", image: "https://imgur.com/nqPVhA4.png" },
+      2012: { id: 2012, name: "Chandler Simpson", rarity: "Legendary", set: "Black Base Signature", image: "https://imgur.com/5XCVKfP.png" },
+      2021: { id: 2021, name: "Paul Skenes", rarity: "Legendary", set: "Blue Moon", image: "https://imgur.com/59KnSYV.png" },
+      2022: { id: 2022, name: "Chandler Simpson", rarity: "Legendary", set: "Blue Moon", image: "https://imgur.com/IK9DLhD.png" },
+
       // GRAND SLAM
       1302: { id: 1302, name: "Junior Caminero", rarity: "SuperRare", set: "Grand Slam", image: "https://imgur.com/ybBVLkw.png" },
       1303: { id: 1303, name: "Junior Caminero", rarity: "Iconic", set: "Grand Slam", image: "https://imgur.com/uqR6x4Z.png" },
@@ -1934,6 +1962,7 @@
           playersCache.push({ uid: docSnap.id, username: d.username, cards: (d.collection || []).length, lastSeen: d.lastSeen || 0 });
         });
         renderPlayersBrowser();
+        if (typeof renderFollowing === "function") renderFollowing();
       }, () => {});
     }
 
@@ -3388,15 +3417,18 @@
         list.innerHTML = "Not following anyone yet.";
         return;
       }
-      list.innerHTML = userFollowing.map(name => `
+      list.innerHTML = userFollowing.map(name => {
+        const p = playersCache.find(x => x.username.toLowerCase() === name.toLowerCase());
+        const online = p && Date.now() - (p.lastSeen || 0) < 45000;
+        return `
         <div class="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-lg px-2 py-1">
-          <span class="text-amber-300 font-bold">${name}</span>
+          <span class="text-amber-300 font-bold">${name} <span class="text-[10px] ${online ? 'text-emerald-400' : 'text-slate-500'}">${online ? 'Online' : 'Offline'}</span></span>
           <div class="flex gap-1">
             <button onclick="quickTradeWithUser('${name}')" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">Trade</button>
             <button onclick="toggleFollow('${name}')" class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Unfollow</button>
           </div>
-        </div>
-      `).join("");
+        </div>`;
+      }).join("");
     }
 
     async function toggleFollow(username) {
