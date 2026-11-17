@@ -761,6 +761,30 @@
             </div>
           </div>
 
+          <!-- ORIGINALS -->
+          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center border border-amber-400">
+                <i class="fa-solid fa-star text-2xl text-amber-500"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-slate-200">Originals</h3><button onclick="showPackOdds('originals')" class="text-[10px] bg-slate-900 border border-slate-600 px-2 py-0.5 rounded-full text-slate-200 hover:text-white">Info</button></div>
+                <p class="text-xs text-slate-400">Simpson, Smith, Schmidt, Soto, Johnson, Seager, Will Smith, Hoskins, Elly, Turner, J-Rod, Strider, Tucker, Alonso</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="buyPack('originals_std')" class="flex-1 bg-slate-900 hover:bg-slate-800 font-bold py-2 rounded-lg text-xs border border-slate-600">
+                Standard (5)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>300 Coins</span>
+              </button>
+              <button onclick="buyPack('originals_super')" class="flex-1 bg-gradient-to-r from-slate-500 to-slate-300 text-slate-950 font-extrabold py-2 rounded-lg text-xs shadow-lg">
+                Super<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>100 Diamonds</span>
+              </button>
+              <button onclick="buyPack('originals_prem')" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-300 text-slate-950 font-extrabold py-2 rounded-lg text-xs shadow-lg">
+                Premium<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>500 Diamonds</span>
+              </button>
+            </div>
+          </div>
+
           <!-- BLACKOUT -->
           <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
             <div class="flex items-center gap-3">
@@ -1285,6 +1309,63 @@
       1828: { id: 1828, name: "Pete Crow-Armstrong", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/z8CvUtP.png" },
       1829: { id: 1829, name: "Brice Turang", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/eOWb4Lg.png" },
       1830: { id: 1830, name: "Ben Rice", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/9i25ybe.png" },
+
+      2101: { id: 2101, name: "Chandler Simpson", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/Ck1il2f.png" },
+      2102: { id: 2102, name: "Ozzie Smith", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/s1CcvGV.png" },
+      2103: { id: 2103, name: "Mike Schmidt", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/52WnMbC.png" },
+      2104: { id: 2104, name: "Juan Soto", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/R7fJ4as.png" },
+      2105: { id: 2105, name: "Randy Johnson", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/T5zAy0d.png" },
+      2106: { id: 2106, name: "Corey Seager", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/J9Vjq6A.png" },
+      2107: { id: 2107, name: "Will Smith", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/PVA9NDQ.png" },
+      2108: { id: 2108, name: "Rhys Hoskins", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/ydWxoHN.png" },
+      2109: { id: 2109, name: "Elly De La Cruz", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/TSJaBng.png" },
+      2110: { id: 2110, name: "Trea Turner", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/gujzV5n.png" },
+      2111: { id: 2111, name: "Julio Rodriguez", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/TbzuSMs.png" },
+      2112: { id: 2112, name: "Spencer Strider", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/0lEnudQ.png" },
+      2113: { id: 2113, name: "Kyle Tucker", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/Hvpk1xZ.png" },
+      2114: { id: 2114, name: "Pete Alonso", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/lAxURpF.png" },
+      2121: { id: 2121, name: "Chandler Simpson", rarity: "Rare", set: "Originals", image: "https://imgur.com/Er7RKxF.png" },
+      2122: { id: 2122, name: "Ozzie Smith", rarity: "Rare", set: "Originals", image: "https://imgur.com/mw46qDU.png" },
+      2123: { id: 2123, name: "Mike Schmidt", rarity: "Rare", set: "Originals", image: "https://imgur.com/gSMa5S0.png" },
+      2124: { id: 2124, name: "Juan Soto", rarity: "Rare", set: "Originals", image: "https://imgur.com/HA1lEyu.png" },
+      2125: { id: 2125, name: "Randy Johnson", rarity: "Rare", set: "Originals", image: "https://imgur.com/yUwThfA.png" },
+      2126: { id: 2126, name: "Corey Seager", rarity: "Rare", set: "Originals", image: "https://imgur.com/c8jjaTL.png" },
+      2127: { id: 2127, name: "Will Smith", rarity: "Rare", set: "Originals", image: "https://imgur.com/Gl5c2sk.png" },
+      2128: { id: 2128, name: "Rhys Hoskins", rarity: "Rare", set: "Originals", image: "https://imgur.com/P8dmdRX.png" },
+      2129: { id: 2129, name: "Elly De La Cruz", rarity: "Rare", set: "Originals", image: "https://imgur.com/qFi5NNF.png" },
+      2130: { id: 2130, name: "Trea Turner", rarity: "Rare", set: "Originals", image: "https://imgur.com/0KGD05G.png" },
+      2131: { id: 2131, name: "Julio Rodriguez", rarity: "Rare", set: "Originals", image: "https://imgur.com/NHXe2RW.png" },
+      2132: { id: 2132, name: "Spencer Strider", rarity: "Rare", set: "Originals", image: "https://imgur.com/JMMkxq8.png" },
+      2133: { id: 2133, name: "Kyle Tucker", rarity: "Rare", set: "Originals", image: "https://imgur.com/8Sz5F5k.png" },
+      2134: { id: 2134, name: "Pete Alonso", rarity: "Rare", set: "Originals", image: "https://imgur.com/5wBmPMr.png" },
+      2141: { id: 2141, name: "Chandler Simpson", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/85aKUXz.png" },
+      2142: { id: 2142, name: "Ozzie Smith", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/4P5cpY5.png" },
+      2143: { id: 2143, name: "Mike Schmidt", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/kWvdISg.png" },
+      2144: { id: 2144, name: "Juan Soto", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/FolApSf.png" },
+      2145: { id: 2145, name: "Randy Johnson", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/eC9Jqc6.png" },
+      2146: { id: 2146, name: "Corey Seager", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/HxD79xt.png" },
+      2147: { id: 2147, name: "Will Smith", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/QlVR081.png" },
+      2148: { id: 2148, name: "Rhys Hoskins", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/r9U0Tg1.png" },
+      2149: { id: 2149, name: "Elly De La Cruz", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/ZMiD1MO.png" },
+      2150: { id: 2150, name: "Trea Turner", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/nUYo8jZ.png" },
+      2151: { id: 2151, name: "Julio Rodriguez", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/U35pM83.png" },
+      2152: { id: 2152, name: "Spencer Strider", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/8X9bEI8.png" },
+      2153: { id: 2153, name: "Kyle Tucker", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/gtjHufK.png" },
+      2154: { id: 2154, name: "Pete Alonso", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/UG38gzu.png" },
+      2161: { id: 2161, name: "Chandler Simpson", rarity: "Iconic", set: "Originals", image: "https://imgur.com/hcTVij6.png" },
+      2162: { id: 2162, name: "Ozzie Smith", rarity: "Iconic", set: "Originals", image: "https://imgur.com/Z0upPOX.png" },
+      2163: { id: 2163, name: "Mike Schmidt", rarity: "Iconic", set: "Originals", image: "https://imgur.com/1AcDTT9.png" },
+      2164: { id: 2164, name: "Juan Soto", rarity: "Iconic", set: "Originals", image: "https://imgur.com/c68s7WF.png" },
+      2165: { id: 2165, name: "Randy Johnson", rarity: "Iconic", set: "Originals", image: "https://imgur.com/Uzd7T4r.png" },
+      2166: { id: 2166, name: "Corey Seager", rarity: "Iconic", set: "Originals", image: "https://imgur.com/2hzJ3WB.png" },
+      2167: { id: 2167, name: "Will Smith", rarity: "Iconic", set: "Originals", image: "https://imgur.com/GlMgdD5.png" },
+      2168: { id: 2168, name: "Rhys Hoskins", rarity: "Iconic", set: "Originals", image: "https://imgur.com/TCUej0z.png" },
+      2169: { id: 2169, name: "Elly De La Cruz", rarity: "Iconic", set: "Originals", image: "https://imgur.com/n9p3bDN.png" },
+      2170: { id: 2170, name: "Trea Turner", rarity: "Iconic", set: "Originals", image: "https://imgur.com/8p5ZKBo.png" },
+      2171: { id: 2171, name: "Julio Rodriguez", rarity: "Iconic", set: "Originals", image: "https://imgur.com/UXMxOAT.png" },
+      2172: { id: 2172, name: "Spencer Strider", rarity: "Iconic", set: "Originals", image: "https://imgur.com/meVqnWS.png" },
+      2173: { id: 2173, name: "Kyle Tucker", rarity: "Iconic", set: "Originals", image: "https://imgur.com/B4zhpQI.png" },
+      2174: { id: 2174, name: "Pete Alonso", rarity: "Iconic", set: "Originals", image: "https://imgur.com/ZHUbydU.png" },
       1841: { id: 1841, name: "Kody Clemens", rarity: "SuperRare", set: "Newsletter", image: "https://imgur.com/RRJBbQr.png", variant: "Extra Extra" },
       1842: { id: 1842, name: "Maikel Garcia", rarity: "SuperRare", set: "Newsletter", image: "https://imgur.com/nieggJ0.png", variant: "Extra Extra" },
       1843: { id: 1843, name: "Jo Adell", rarity: "SuperRare", set: "Newsletter", image: "https://imgur.com/4pEn45H.png", variant: "Extra Extra" },
@@ -1352,6 +1433,7 @@
       cycle: { name: "Cycle", rewardCardId: null, requiredIds: [1501, 1502, 1503, 1504] },
       veterans: { name: "Veterans Day", rewardCardId: null, requiredIds: [1601, 1602, 1603, 1604, 1605, 1606, 1611, 1612, 1613, 1614, 1615, 1616, 1621, 1622, 1623, 1624, 1625, 1626, 1631, 1632, 1633, 1634, 1635, 1636] },
       signature: { name: "Signature Series 1", rewardCardId: null, requiredIds: [1701, 1702, 1703, 1704] },
+      originals: { name: "Originals", rewardCardId: null, requiredIds: [2101,2102,2103,2104,2105,2106,2107,2108,2109,2110,2111,2112,2113,2114,2121,2122,2123,2124,2125,2126,2127,2128,2129,2130,2131,2132,2133,2134,2141,2142,2143,2144,2145,2146,2147,2148,2149,2150,2151,2152,2153,2154,2161,2162,2163,2164,2165,2166,2167,2168,2169,2170,2171,2172,2173,2174] },
       newsletter: { name: "Newsletter", rewardCardId: null, requiredIds: [1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 1809, 1810, 1821, 1822, 1823, 1824, 1825, 1826, 1827, 1828, 1829, 1830, 1841, 1842, 1843, 1844, 1845, 1846, 1847, 1848, 1851, 1852, 1853, 1854, 1855, 1856, 1857, 1858] }
     };
 
@@ -1432,6 +1514,10 @@
     const SIG_SR_IDS = [1702];
     const SIG_ICONIC_IDS = [1703];
     const SIG_LEG_IDS = [1704];
+    const ORIG_UC_IDS = [2101,2102,2103,2104,2105,2106,2107,2108,2109,2110,2111,2112,2113,2114];
+    const ORIG_RARE_IDS = [2121,2122,2123,2124,2125,2126,2127,2128,2129,2130,2131,2132,2133,2134];
+    const ORIG_SR_IDS = [2141,2142,2143,2144,2145,2146,2147,2148,2149,2150,2151,2152,2153,2154];
+    const ORIG_ICONIC_IDS = [2161,2162,2163,2164,2165,2166,2167,2168,2169,2170,2171,2172,2173,2174];
     const NEWS_UC_IDS = [1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 1809, 1810];
     const NEWS_RARE_IDS = [1821, 1822, 1823, 1824, 1825, 1826, 1827, 1828, 1829, 1830];
     const NEWS_SR_IDS = [1841, 1842, 1843, 1844, 1845, 1846, 1847, 1848];
@@ -2551,6 +2637,12 @@
         "1 in 5 Rare, 1 in 10 Super Rare, 1 in 30 Iconic, 1 in 100 Legendary.",
         "Super (250 diamonds): 1 Rare, 1 Super Rare, 1 in 3 Iconic, 1 in 10 Legendary."
       ],
+      originals: [
+        "Standard (300 coins): 1 Uncommon.",
+        "1 in 3 Rare, 1 in 10 Super Rare, 1 in 30 Iconic.",
+        "Super (100 diamonds): 3 Uncommons, 1 Rare, 1 in 2 Super Rare, 1 in 5 Iconic.",
+        "Premium (500 diamonds): 6 Uncommons, 3 Rares, 2 Super Rares, 1 in 2 Iconic."
+      ],
       newsletter: [
         "Standard (400 coins): 1 Newsletter Uncommon.",
         "1 in 5 Rare, 1 in 15 Extra Extra Super Rare, 1 in 35 Sepia Extra Extra Iconic.",
@@ -2662,6 +2754,9 @@
       else if (packVariant === 'veterans_super') costDiamonds = 250;
       else if (packVariant === 'signature_std') costCoins = 450;
       else if (packVariant === 'signature_super') costDiamonds = 250;
+      else if (packVariant === 'originals_std') costCoins = 300;
+      else if (packVariant === 'originals_super') costDiamonds = 100;
+      else if (packVariant === 'originals_prem') costDiamonds = 500;
       else if (packVariant === 'newsletter_std') costCoins = 400;
       else if (packVariant === 'newsletter_super') costDiamonds = 250;
       else if (packVariant === 'blackout_super') costDiamonds = 300;
@@ -2731,6 +2826,30 @@
           getRandom(COMMON_IDS), getRandom(COMMON_IDS)
         ];
         if (Math.random() < 1/5) pendingPackPulledCards[3] = getRandom(GEM_LEGENDARY_IDS);
+      } else if (packVariant === 'originals_std') {
+        pendingPackPulledCards = [
+          getRandom(ORIG_UC_IDS),
+          getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
+        ];
+        if (Math.random() < 1/30) pendingPackPulledCards[1] = getRandom(ORIG_ICONIC_IDS);
+        else if (Math.random() < 1/10) pendingPackPulledCards[1] = getRandom(ORIG_SR_IDS);
+        else if (Math.random() < 1/3) pendingPackPulledCards[1] = getRandom(ORIG_RARE_IDS);
+      } else if (packVariant === 'originals_super') {
+        pendingPackPulledCards = [
+          getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
+          getRandom(ORIG_RARE_IDS),
+          getRandom(COMMON_IDS)
+        ];
+        if (Math.random() < 1/5) pendingPackPulledCards[4] = getRandom(ORIG_ICONIC_IDS);
+        else if (Math.random() < 1/2) pendingPackPulledCards[4] = getRandom(ORIG_SR_IDS);
+      } else if (packVariant === 'originals_prem') {
+        pendingPackPulledCards = [
+          getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
+          getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
+          getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS),
+          getRandom(ORIG_SR_IDS), getRandom(ORIG_SR_IDS)
+        ];
+        if (Math.random() < 1/2) pendingPackPulledCards.push(getRandom(ORIG_ICONIC_IDS));
       } else if (packVariant === 'newsletter_std') {
         pendingPackPulledCards = [
           getRandom(NEWS_UC_IDS),
