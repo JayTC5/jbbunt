@@ -72,6 +72,7 @@
     }
 
     /* Rarity Glows & Borders */
+    .glow-BaseTier { border: 2px solid #475569; box-shadow: 0 0 8px rgba(71, 85, 105, 0.4); }
     .glow-Common { border: 2px solid #64748b; box-shadow: 0 0 10px rgba(100, 116, 139, 0.4); }
     .glow-Uncommon { border: 2px solid #22c55e; box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
     .glow-Rare { border: 2px solid #06b6d4; box-shadow: 0 0 16px rgba(6, 182, 212, 0.6); }
@@ -693,6 +694,9 @@
       <button onclick="switchTab('news')" id="nav-btn-news" class="nav-tab flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-slate-800 hover:bg-slate-700 text-slate-300">
         <i class="fa-solid fa-newspaper"></i> News
       </button>
+      <button onclick="switchTab('crafting')" id="nav-btn-crafting" class="nav-tab flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-slate-800 hover:bg-slate-700 text-slate-300">
+        <i class="fa-solid fa-hammer"></i> Crafting
+      </button>
       <button onclick="switchTab('missions')" id="nav-btn-missions" class="nav-tab flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-slate-800 hover:bg-slate-700 text-slate-300">
         <i class="fa-solid fa-list-check"></i> Missions & Sets
       </button>
@@ -717,7 +721,7 @@
       <!-- RARITY CATEGORY TABS -->
       <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-3" id="rarity-tabs">
         <button onclick="filterCollectionRarity('All')" class="rarity-tab bg-amber-500 text-slate-950 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="All">All Cards</button>
-        <button onclick="filterCollectionRarity('Common')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="Common">Common</button>
+        <button onclick="filterCollectionRarity('BaseTier')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="BaseTier">Base Tier</button>
         <button onclick="filterCollectionRarity('Uncommon')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="Uncommon">Uncommon</button>
         <button onclick="filterCollectionRarity('Rare')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="Rare">Rare</button>
         <button onclick="filterCollectionRarity('SuperRare')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="SuperRare">Super Rare</button>
@@ -1053,6 +1057,13 @@
       </div>
     </section>
 
+    <section id="tab-crafting" class="tab-page hidden">
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center">
+        <h2 class="font-baseball text-4xl text-amber-400 mb-3"><i class="fa-solid fa-hammer mr-2"></i>Crafting</h2>
+        <p class="text-slate-300 text-lg">Coming soon</p>
+      </div>
+    </section>
+
     <section id="tab-missions" class="tab-page hidden grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- MISSIONS CENTER -->
       <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
@@ -1086,14 +1097,14 @@
     };
 
     const CARDS_CATALOG = {
-      1: { id: 1, name: "Tommy Edman", rarity: "Common", set: "Base", image: "https://i.imgur.com/oekMOWf.png" },
-      2: { id: 2, name: "Tyler O'Neil", rarity: "Common", set: "Base", image: "https://i.imgur.com/B0yonbD.png" },
-      3: { id: 3, name: "CJ Abrams", rarity: "Common", set: "Base", image: "https://i.imgur.com/sjxoEQJ.png" },
-      4: { id: 4, name: "Gerrit Cole", rarity: "Common", set: "Base", image: "https://i.imgur.com/6qVJvoc.png" },
-      5: { id: 5, name: "Zack Wheeler", rarity: "Common", set: "Base", image: "https://i.imgur.com/9swoLo6.png" },
-      6: { id: 6, name: "Yandy Diaz", rarity: "Common", set: "Base", image: "https://i.imgur.com/VeOURtk.png" },
-      7: { id: 7, name: "Corbin Carroll", rarity: "Common", set: "Base", image: "https://i.imgur.com/JRdTwQd.png" },
-      28: { id: 28, name: "Josh Hader", rarity: "Common", set: "Base", image: "https://i.imgur.com/2NH5DDY.png" },
+      1: { id: 1, name: "Tommy Edman", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/oekMOWf.png" },
+      2: { id: 2, name: "Tyler O'Neil", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/B0yonbD.png" },
+      3: { id: 3, name: "CJ Abrams", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/sjxoEQJ.png" },
+      4: { id: 4, name: "Gerrit Cole", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/6qVJvoc.png" },
+      5: { id: 5, name: "Zack Wheeler", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/9swoLo6.png" },
+      6: { id: 6, name: "Yandy Diaz", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/VeOURtk.png" },
+      7: { id: 7, name: "Corbin Carroll", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/JRdTwQd.png" },
+      28: { id: 28, name: "Josh Hader", rarity: "BaseTier", set: "Base", image: "https://i.imgur.com/2NH5DDY.png" },
 
       201: { id: 201, name: "Brice Turang", rarity: "Uncommon", set: "Diamond", image: "https://i.imgur.com/TI2tkKc.png" },
       202: { id: 202, name: "Tyler O'Neil", rarity: "Uncommon", set: "Diamond", image: "https://i.imgur.com/C3nNisV.png" },
@@ -1310,62 +1321,62 @@
       1829: { id: 1829, name: "Brice Turang", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/eOWb4Lg.png" },
       1830: { id: 1830, name: "Ben Rice", rarity: "Rare", set: "Newsletter", image: "https://imgur.com/9i25ybe.png" },
 
-      2101: { id: 2101, name: "Chandler Simpson", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/Ck1il2f.png" },
-      2102: { id: 2102, name: "Ozzie Smith", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/s1CcvGV.png" },
-      2103: { id: 2103, name: "Mike Schmidt", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/52WnMbC.png" },
-      2104: { id: 2104, name: "Juan Soto", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/R7fJ4as.png" },
-      2105: { id: 2105, name: "Randy Johnson", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/T5zAy0d.png" },
-      2106: { id: 2106, name: "Corey Seager", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/J9Vjq6A.png" },
-      2107: { id: 2107, name: "Will Smith", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/PVA9NDQ.png" },
-      2108: { id: 2108, name: "Rhys Hoskins", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/ydWxoHN.png" },
-      2109: { id: 2109, name: "Elly De La Cruz", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/TSJaBng.png" },
-      2110: { id: 2110, name: "Trea Turner", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/gujzV5n.png" },
-      2111: { id: 2111, name: "Julio Rodriguez", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/TbzuSMs.png" },
-      2112: { id: 2112, name: "Spencer Strider", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/0lEnudQ.png" },
-      2113: { id: 2113, name: "Kyle Tucker", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/Hvpk1xZ.png" },
-      2114: { id: 2114, name: "Pete Alonso", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/lAxURpF.png" },
-      2121: { id: 2121, name: "Chandler Simpson", rarity: "Rare", set: "Originals", image: "https://imgur.com/Er7RKxF.png" },
-      2122: { id: 2122, name: "Ozzie Smith", rarity: "Rare", set: "Originals", image: "https://imgur.com/mw46qDU.png" },
-      2123: { id: 2123, name: "Mike Schmidt", rarity: "Rare", set: "Originals", image: "https://imgur.com/gSMa5S0.png" },
-      2124: { id: 2124, name: "Juan Soto", rarity: "Rare", set: "Originals", image: "https://imgur.com/HA1lEyu.png" },
-      2125: { id: 2125, name: "Randy Johnson", rarity: "Rare", set: "Originals", image: "https://imgur.com/yUwThfA.png" },
-      2126: { id: 2126, name: "Corey Seager", rarity: "Rare", set: "Originals", image: "https://imgur.com/c8jjaTL.png" },
-      2127: { id: 2127, name: "Will Smith", rarity: "Rare", set: "Originals", image: "https://imgur.com/Gl5c2sk.png" },
-      2128: { id: 2128, name: "Rhys Hoskins", rarity: "Rare", set: "Originals", image: "https://imgur.com/P8dmdRX.png" },
-      2129: { id: 2129, name: "Elly De La Cruz", rarity: "Rare", set: "Originals", image: "https://imgur.com/qFi5NNF.png" },
-      2130: { id: 2130, name: "Trea Turner", rarity: "Rare", set: "Originals", image: "https://imgur.com/0KGD05G.png" },
-      2131: { id: 2131, name: "Julio Rodriguez", rarity: "Rare", set: "Originals", image: "https://imgur.com/NHXe2RW.png" },
-      2132: { id: 2132, name: "Spencer Strider", rarity: "Rare", set: "Originals", image: "https://imgur.com/JMMkxq8.png" },
-      2133: { id: 2133, name: "Kyle Tucker", rarity: "Rare", set: "Originals", image: "https://imgur.com/8Sz5F5k.png" },
-      2134: { id: 2134, name: "Pete Alonso", rarity: "Rare", set: "Originals", image: "https://imgur.com/5wBmPMr.png" },
-      2141: { id: 2141, name: "Chandler Simpson", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/85aKUXz.png" },
-      2142: { id: 2142, name: "Ozzie Smith", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/4P5cpY5.png" },
-      2143: { id: 2143, name: "Mike Schmidt", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/kWvdISg.png" },
-      2144: { id: 2144, name: "Juan Soto", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/FolApSf.png" },
-      2145: { id: 2145, name: "Randy Johnson", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/eC9Jqc6.png" },
-      2146: { id: 2146, name: "Corey Seager", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/HxD79xt.png" },
-      2147: { id: 2147, name: "Will Smith", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/QlVR081.png" },
-      2148: { id: 2148, name: "Rhys Hoskins", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/r9U0Tg1.png" },
-      2149: { id: 2149, name: "Elly De La Cruz", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/ZMiD1MO.png" },
-      2150: { id: 2150, name: "Trea Turner", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/nUYo8jZ.png" },
-      2151: { id: 2151, name: "Julio Rodriguez", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/U35pM83.png" },
-      2152: { id: 2152, name: "Spencer Strider", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/8X9bEI8.png" },
-      2153: { id: 2153, name: "Kyle Tucker", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/gtjHufK.png" },
-      2154: { id: 2154, name: "Pete Alonso", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/UG38gzu.png" },
-      2161: { id: 2161, name: "Chandler Simpson", rarity: "Iconic", set: "Originals", image: "https://imgur.com/hcTVij6.png" },
-      2162: { id: 2162, name: "Ozzie Smith", rarity: "Iconic", set: "Originals", image: "https://imgur.com/Z0upPOX.png" },
-      2163: { id: 2163, name: "Mike Schmidt", rarity: "Iconic", set: "Originals", image: "https://imgur.com/1AcDTT9.png" },
-      2164: { id: 2164, name: "Juan Soto", rarity: "Iconic", set: "Originals", image: "https://imgur.com/c68s7WF.png" },
-      2165: { id: 2165, name: "Randy Johnson", rarity: "Iconic", set: "Originals", image: "https://imgur.com/Uzd7T4r.png" },
-      2166: { id: 2166, name: "Corey Seager", rarity: "Iconic", set: "Originals", image: "https://imgur.com/2hzJ3WB.png" },
-      2167: { id: 2167, name: "Will Smith", rarity: "Iconic", set: "Originals", image: "https://imgur.com/GlMgdD5.png" },
-      2168: { id: 2168, name: "Rhys Hoskins", rarity: "Iconic", set: "Originals", image: "https://imgur.com/TCUej0z.png" },
-      2169: { id: 2169, name: "Elly De La Cruz", rarity: "Iconic", set: "Originals", image: "https://imgur.com/n9p3bDN.png" },
-      2170: { id: 2170, name: "Trea Turner", rarity: "Iconic", set: "Originals", image: "https://imgur.com/8p5ZKBo.png" },
-      2171: { id: 2171, name: "Julio Rodriguez", rarity: "Iconic", set: "Originals", image: "https://imgur.com/UXMxOAT.png" },
-      2172: { id: 2172, name: "Spencer Strider", rarity: "Iconic", set: "Originals", image: "https://imgur.com/meVqnWS.png" },
-      2173: { id: 2173, name: "Kyle Tucker", rarity: "Iconic", set: "Originals", image: "https://imgur.com/B4zhpQI.png" },
-      2174: { id: 2174, name: "Pete Alonso", rarity: "Iconic", set: "Originals", image: "https://imgur.com/ZHUbydU.png" },
+      2101: { id: 2101, name: "Chandler Simpson", rarity: "Common", set: "Originals", image: "https://imgur.com/Ck1il2f.png" },
+      2102: { id: 2102, name: "Ozzie Smith", rarity: "Common", set: "Originals", image: "https://imgur.com/s1CcvGV.png" },
+      2103: { id: 2103, name: "Mike Schmidt", rarity: "Common", set: "Originals", image: "https://imgur.com/52WnMbC.png" },
+      2104: { id: 2104, name: "Juan Soto", rarity: "Common", set: "Originals", image: "https://imgur.com/R7fJ4as.png" },
+      2105: { id: 2105, name: "Randy Johnson", rarity: "Common", set: "Originals", image: "https://imgur.com/T5zAy0d.png" },
+      2106: { id: 2106, name: "Corey Seager", rarity: "Common", set: "Originals", image: "https://imgur.com/J9Vjq6A.png" },
+      2107: { id: 2107, name: "Will Smith", rarity: "Common", set: "Originals", image: "https://imgur.com/PVA9NDQ.png" },
+      2108: { id: 2108, name: "Rhys Hoskins", rarity: "Common", set: "Originals", image: "https://imgur.com/ydWxoHN.png" },
+      2109: { id: 2109, name: "Elly De La Cruz", rarity: "Common", set: "Originals", image: "https://imgur.com/TSJaBng.png" },
+      2110: { id: 2110, name: "Trea Turner", rarity: "Common", set: "Originals", image: "https://imgur.com/gujzV5n.png" },
+      2111: { id: 2111, name: "Julio Rodriguez", rarity: "Common", set: "Originals", image: "https://imgur.com/TbzuSMs.png" },
+      2112: { id: 2112, name: "Spencer Strider", rarity: "Common", set: "Originals", image: "https://imgur.com/0lEnudQ.png" },
+      2113: { id: 2113, name: "Kyle Tucker", rarity: "Common", set: "Originals", image: "https://imgur.com/Hvpk1xZ.png" },
+      2114: { id: 2114, name: "Pete Alonso", rarity: "Common", set: "Originals", image: "https://imgur.com/lAxURpF.png" },
+      2121: { id: 2121, name: "Chandler Simpson", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/Er7RKxF.png" },
+      2122: { id: 2122, name: "Ozzie Smith", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/mw46qDU.png" },
+      2123: { id: 2123, name: "Mike Schmidt", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/gSMa5S0.png" },
+      2124: { id: 2124, name: "Juan Soto", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/HA1lEyu.png" },
+      2125: { id: 2125, name: "Randy Johnson", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/yUwThfA.png" },
+      2126: { id: 2126, name: "Corey Seager", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/c8jjaTL.png" },
+      2127: { id: 2127, name: "Will Smith", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/Gl5c2sk.png" },
+      2128: { id: 2128, name: "Rhys Hoskins", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/P8dmdRX.png" },
+      2129: { id: 2129, name: "Elly De La Cruz", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/qFi5NNF.png" },
+      2130: { id: 2130, name: "Trea Turner", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/0KGD05G.png" },
+      2131: { id: 2131, name: "Julio Rodriguez", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/NHXe2RW.png" },
+      2132: { id: 2132, name: "Spencer Strider", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/JMMkxq8.png" },
+      2133: { id: 2133, name: "Kyle Tucker", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/8Sz5F5k.png" },
+      2134: { id: 2134, name: "Pete Alonso", rarity: "Uncommon", set: "Originals", image: "https://imgur.com/5wBmPMr.png" },
+      2141: { id: 2141, name: "Chandler Simpson", rarity: "Rare", set: "Originals", image: "https://imgur.com/85aKUXz.png" },
+      2142: { id: 2142, name: "Ozzie Smith", rarity: "Rare", set: "Originals", image: "https://imgur.com/4P5cpY5.png" },
+      2143: { id: 2143, name: "Mike Schmidt", rarity: "Rare", set: "Originals", image: "https://imgur.com/kWvdISg.png" },
+      2144: { id: 2144, name: "Juan Soto", rarity: "Rare", set: "Originals", image: "https://imgur.com/FolApSf.png" },
+      2145: { id: 2145, name: "Randy Johnson", rarity: "Rare", set: "Originals", image: "https://imgur.com/eC9Jqc6.png" },
+      2146: { id: 2146, name: "Corey Seager", rarity: "Rare", set: "Originals", image: "https://imgur.com/HxD79xt.png" },
+      2147: { id: 2147, name: "Will Smith", rarity: "Rare", set: "Originals", image: "https://imgur.com/QlVR081.png" },
+      2148: { id: 2148, name: "Rhys Hoskins", rarity: "Rare", set: "Originals", image: "https://imgur.com/r9U0Tg1.png" },
+      2149: { id: 2149, name: "Elly De La Cruz", rarity: "Rare", set: "Originals", image: "https://imgur.com/ZMiD1MO.png" },
+      2150: { id: 2150, name: "Trea Turner", rarity: "Rare", set: "Originals", image: "https://imgur.com/nUYo8jZ.png" },
+      2151: { id: 2151, name: "Julio Rodriguez", rarity: "Rare", set: "Originals", image: "https://imgur.com/U35pM83.png" },
+      2152: { id: 2152, name: "Spencer Strider", rarity: "Rare", set: "Originals", image: "https://imgur.com/8X9bEI8.png" },
+      2153: { id: 2153, name: "Kyle Tucker", rarity: "Rare", set: "Originals", image: "https://imgur.com/gtjHufK.png" },
+      2154: { id: 2154, name: "Pete Alonso", rarity: "Rare", set: "Originals", image: "https://imgur.com/UG38gzu.png" },
+      2161: { id: 2161, name: "Chandler Simpson", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/hcTVij6.png" },
+      2162: { id: 2162, name: "Ozzie Smith", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/Z0upPOX.png" },
+      2163: { id: 2163, name: "Mike Schmidt", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/1AcDTT9.png" },
+      2164: { id: 2164, name: "Juan Soto", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/c68s7WF.png" },
+      2165: { id: 2165, name: "Randy Johnson", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/Uzd7T4r.png" },
+      2166: { id: 2166, name: "Corey Seager", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/2hzJ3WB.png" },
+      2167: { id: 2167, name: "Will Smith", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/GlMgdD5.png" },
+      2168: { id: 2168, name: "Rhys Hoskins", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/TCUej0z.png" },
+      2169: { id: 2169, name: "Elly De La Cruz", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/n9p3bDN.png" },
+      2170: { id: 2170, name: "Trea Turner", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/8p5ZKBo.png" },
+      2171: { id: 2171, name: "Julio Rodriguez", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/UXMxOAT.png" },
+      2172: { id: 2172, name: "Spencer Strider", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/meVqnWS.png" },
+      2173: { id: 2173, name: "Kyle Tucker", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/B4zhpQI.png" },
+      2174: { id: 2174, name: "Pete Alonso", rarity: "SuperRare", set: "Originals", image: "https://imgur.com/ZHUbydU.png" },
       1841: { id: 1841, name: "Kody Clemens", rarity: "SuperRare", set: "Newsletter", image: "https://imgur.com/RRJBbQr.png", variant: "Extra Extra" },
       1842: { id: 1842, name: "Maikel Garcia", rarity: "SuperRare", set: "Newsletter", image: "https://imgur.com/nieggJ0.png", variant: "Extra Extra" },
       1843: { id: 1843, name: "Jo Adell", rarity: "SuperRare", set: "Newsletter", image: "https://imgur.com/4pEn45H.png", variant: "Extra Extra" },
@@ -2638,10 +2649,10 @@
         "Super (250 diamonds): 1 Rare, 1 Super Rare, 1 in 3 Iconic, 1 in 10 Legendary."
       ],
       originals: [
-        "Standard (300 coins): 1 Uncommon.",
-        "1 in 3 Rare, 1 in 10 Super Rare, 1 in 30 Iconic.",
-        "Super (100 diamonds): 3 Uncommons, 1 Rare, 1 in 2 Super Rare, 1 in 5 Iconic.",
-        "Premium (500 diamonds): 6 Uncommons, 3 Rares, 2 Super Rares, 1 in 2 Iconic."
+        "Standard (300 coins): 1 Common.",
+        "1 in 3 Uncommon, 1 in 10 Rare, 1 in 30 Super Rare.",
+        "Super (100 diamonds): 3 Commons, 1 Uncommon, 1 in 2 Rare, 1 in 5 Super Rare.",
+        "Premium (500 diamonds): 6 Commons, 3 Uncommons, 2 Rares, 1 in 2 Super Rare."
       ],
       newsletter: [
         "Standard (400 coins): 1 Newsletter Uncommon.",
