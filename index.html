@@ -722,6 +722,7 @@
       <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-3" id="rarity-tabs">
         <button onclick="filterCollectionRarity('All')" class="rarity-tab bg-amber-500 text-slate-950 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="All">All Cards</button>
         <button onclick="filterCollectionRarity('BaseTier')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="BaseTier">Base Tier</button>
+        <button onclick="filterCollectionRarity('Common')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="Common">Common</button>
         <button onclick="filterCollectionRarity('Uncommon')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="Uncommon">Uncommon</button>
         <button onclick="filterCollectionRarity('Rare')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="Rare">Rare</button>
         <button onclick="filterCollectionRarity('SuperRare')" class="rarity-tab bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs px-3 py-1.5 rounded-lg transition" data-rarity="SuperRare">Super Rare</button>
@@ -778,13 +779,10 @@
             </div>
             <div class="flex gap-2">
               <button onclick="buyPack('originals_std')" class="flex-1 bg-slate-900 hover:bg-slate-800 font-bold py-2 rounded-lg text-xs border border-slate-600">
-                Standard (5)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>300 Coins</span>
+                Standard (2 C, 1 UC)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>300 Coins</span>
               </button>
               <button onclick="buyPack('originals_super')" class="flex-1 bg-gradient-to-r from-slate-500 to-slate-300 text-slate-950 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                Super<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>100 Diamonds</span>
-              </button>
-              <button onclick="buyPack('originals_prem')" class="flex-1 bg-gradient-to-r from-amber-500 to-yellow-300 text-slate-950 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                Premium<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>500 Diamonds</span>
+                Super (6 C, 4 UC, 2 R)<br><span class="text-slate-900"><i class="fa-solid fa-gem mr-1"></i>100 Diamonds</span>
               </button>
             </div>
           </div>
@@ -2649,10 +2647,10 @@
         "Super (250 diamonds): 1 Rare, 1 Super Rare, 1 in 3 Iconic, 1 in 10 Legendary."
       ],
       originals: [
-        "Standard (300 coins): 1 Common.",
-        "1 in 3 Uncommon, 1 in 10 Rare, 1 in 30 Super Rare.",
-        "Super (100 diamonds): 3 Commons, 1 Uncommon, 1 in 2 Rare, 1 in 5 Super Rare.",
-        "Premium (500 diamonds): 6 Commons, 3 Uncommons, 2 Rares, 1 in 2 Super Rare."
+        "Standard (300 coins): 2 Commons and 1 Uncommon.",
+        "1 in 3 Rare, 1 in 10 Super Rare.",
+        "Super (100 diamonds): 6 Commons, 4 Uncommons, 2 Rares.",
+        "1 in 2 Super Rare."
       ],
       newsletter: [
         "Standard (400 coins): 1 Newsletter Uncommon.",
@@ -2767,7 +2765,6 @@
       else if (packVariant === 'signature_super') costDiamonds = 250;
       else if (packVariant === 'originals_std') costCoins = 300;
       else if (packVariant === 'originals_super') costDiamonds = 100;
-      else if (packVariant === 'originals_prem') costDiamonds = 500;
       else if (packVariant === 'newsletter_std') costCoins = 400;
       else if (packVariant === 'newsletter_super') costDiamonds = 250;
       else if (packVariant === 'blackout_super') costDiamonds = 300;
@@ -2839,25 +2836,17 @@
         if (Math.random() < 1/5) pendingPackPulledCards[3] = getRandom(GEM_LEGENDARY_IDS);
       } else if (packVariant === 'originals_std') {
         pendingPackPulledCards = [
-          getRandom(ORIG_UC_IDS),
-          getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS), getRandom(COMMON_IDS)
+          getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
+          getRandom(ORIG_RARE_IDS),
+          getRandom(COMMON_IDS), getRandom(COMMON_IDS)
         ];
-        if (Math.random() < 1/30) pendingPackPulledCards[1] = getRandom(ORIG_ICONIC_IDS);
-        else if (Math.random() < 1/10) pendingPackPulledCards[1] = getRandom(ORIG_SR_IDS);
-        else if (Math.random() < 1/3) pendingPackPulledCards[1] = getRandom(ORIG_RARE_IDS);
+        if (Math.random() < 1/10) pendingPackPulledCards[3] = getRandom(ORIG_ICONIC_IDS);
+        else if (Math.random() < 1/3) pendingPackPulledCards[3] = getRandom(ORIG_SR_IDS);
       } else if (packVariant === 'originals_super') {
         pendingPackPulledCards = [
           getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
-          getRandom(ORIG_RARE_IDS),
-          getRandom(COMMON_IDS)
-        ];
-        if (Math.random() < 1/5) pendingPackPulledCards[4] = getRandom(ORIG_ICONIC_IDS);
-        else if (Math.random() < 1/2) pendingPackPulledCards[4] = getRandom(ORIG_SR_IDS);
-      } else if (packVariant === 'originals_prem') {
-        pendingPackPulledCards = [
           getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
-          getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS), getRandom(ORIG_UC_IDS),
-          getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS),
+          getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS), getRandom(ORIG_RARE_IDS),
           getRandom(ORIG_SR_IDS), getRandom(ORIG_SR_IDS)
         ];
         if (Math.random() < 1/2) pendingPackPulledCards.push(getRandom(ORIG_ICONIC_IDS));
