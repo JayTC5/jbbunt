@@ -52,7 +52,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .card-img-frame img {
       width: 100%;
       height: 100%;
@@ -742,7 +741,7 @@
 
         <!-- CATEGORY 1: MAIN STORE -->
         <h3 class="text-xs uppercase tracking-wider font-bold text-blue-400 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-store"></i> Main Store
+          <i class="fa-solid fa-store"></i> Packs
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <!-- NEWSLETTER -->
@@ -761,7 +760,7 @@
                 Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>400 Coins</span>
               </button>
               <button onclick="buyPack('newsletter_super')" class="flex-1 bg-gradient-to-r from-slate-600 to-slate-400 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER (4 UC, 2 R)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
+                SUPER<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
               </button>
             </div>
           </div>
@@ -787,147 +786,11 @@
             </div>
           </div>
 
-          <!-- BLACKOUT -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-black flex items-center justify-center border border-slate-600">
-                <i class="fa-solid fa-moon text-2xl text-slate-200"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-slate-200">Blackout</h3><button onclick="showPackOdds('blackout')" class="text-[10px] bg-slate-900 border border-slate-700 px-2 py-0.5 rounded-full text-slate-300 hover:text-white">Info</button></div>
-                <p class="text-xs text-slate-400">Skenes, Abreu, Harper, Abrams, Wheeler, Cease</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="buyPack('blackout_std')" class="flex-1 bg-slate-900 hover:bg-slate-800 font-bold py-2 rounded-lg text-xs border border-slate-700">
-                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>500 Coins</span>
-              </button>
-              <button onclick="buyPack('blackout_super')" class="flex-1 bg-gradient-to-r from-slate-700 to-slate-500 hover:from-slate-600 hover:to-slate-400 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER (3 UC, 2 R, 1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>300 Diamonds</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- DIAMOND PACKS -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
-            <div class="flex items-center gap-3">
-              <img src="https://i.imgur.com/rC2Brs6.png" alt="Diamond Logo" class="w-12 h-12 rounded-xl object-cover border border-blue-500/40">
-              <div>
-                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-blue-400">Diamond Pack</h3><button onclick="showPackOdds('diamond')" class="text-[10px] bg-blue-950 border border-blue-700 px-2 py-0.5 rounded-full text-blue-200 hover:text-white">Info</button></div>
-                <p class="text-xs text-slate-400">Diamond UCs, That Ball's Gone, Iconics 1:35</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="buyPack('diamond_std')" class="flex-1 bg-blue-950/60 hover:bg-blue-900/60 font-bold py-2 rounded-lg text-xs border border-blue-700">
-                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>300 Coins</span>
-              </button>
-              <button onclick="buyPack('diamond_super')" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER PACK (5 UC, 3 R, 1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CATEGORY 2: GRAND SLAM -->
-        <h3 class="text-xs uppercase tracking-wider font-bold text-emerald-400 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-layer-group"></i> Featured Sets
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <!-- VETERANS DAY -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-red-950 flex items-center justify-center border border-red-500/50">
-                <i class="fa-solid fa-flag text-2xl text-red-300"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-red-200">Veterans Day</h3><button onclick="showPackOdds('veterans')" class="text-[10px] bg-red-950 border border-red-700 px-2 py-0.5 rounded-full text-red-200 hover:text-white">Info</button></div>
-                <p class="text-xs text-slate-400">Peters, Adell, Witt, Bichette, Gonzales, Lindor</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="buyPack('veterans_std')" class="flex-1 bg-red-950/60 hover:bg-red-900/60 font-bold py-2 rounded-lg text-xs border border-red-700">
-                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>300 Coins</span>
-              </button>
-              <button onclick="buyPack('veterans_super')" class="flex-1 bg-gradient-to-r from-red-700 to-amber-600 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER (3 UC, 2 R, 1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- MYTHICAL -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-purple-950 flex items-center justify-center border border-purple-500/50">
-                <i class="fa-solid fa-dragon text-2xl text-purple-300"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-purple-300">Mythical</h3><button onclick="showPackOdds('mythical')" class="text-[10px] bg-purple-950 border border-purple-700 px-2 py-0.5 rounded-full text-purple-200 hover:text-white">Info</button></div>
-                <p class="text-xs text-slate-400">Witt Jr, Ramirez, Gonzales, Caminero</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="buyPack('mythical_std')" class="flex-1 bg-purple-950/60 hover:bg-purple-900/60 font-bold py-2 rounded-lg text-xs border border-purple-700">
-                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>500 Coins</span>
-              </button>
-              <button onclick="buyPack('mythical_super')" class="flex-1 bg-gradient-to-r from-purple-700 to-fuchsia-600 hover:from-purple-600 hover:to-fuchsia-500 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER (2 R, 1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CATEGORY 3: PREMIUM STORE -->
-        <h3 class="text-xs uppercase tracking-wider font-bold text-amber-400 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-crown"></i> Premium Store
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- SIGNATURE SERIES 1 -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+          <!-- APEX -->
+          <div class="bg-slate-950 border border-amber-500/40 p-4 rounded-xl space-y-3">
             <div class="flex items-center gap-3">
               <div class="w-12 h-12 rounded-xl bg-amber-950 flex items-center justify-center border border-amber-400">
-                <i class="fa-solid fa-signature text-2xl text-amber-300"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-amber-200">Signature Series 1</h3><button onclick="showPackOdds('signature')" class="text-[10px] bg-amber-950 border border-amber-600 px-2 py-0.5 rounded-full text-amber-200 hover:text-white">Info</button></div>
-                <p class="text-xs text-slate-400">Paul Skenes</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="buyPack('signature_std')" class="flex-1 bg-amber-950/60 hover:bg-amber-900/60 font-bold py-2 rounded-lg text-xs border border-amber-600">
-                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>450 Coins</span>
-              </button>
-              <button onclick="buyPack('signature_super')" class="flex-1 bg-gradient-to-r from-amber-600 to-yellow-500 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER (1 R, 1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>250 Diamonds</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- CYCLE -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-cyan-950 flex items-center justify-center border border-cyan-500/50">
-                <i class="fa-solid fa-rotate text-2xl text-cyan-300"></i>
-              </div>
-              <div>
-                <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-cyan-300">Cycle</h3><button onclick="showPackOdds('cycle')" class="text-[10px] bg-cyan-950 border border-cyan-700 px-2 py-0.5 rounded-full text-cyan-200 hover:text-white">Info</button></div>
-                <p class="text-xs text-slate-400">Tristan Peters</p>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="buyPack('cycle_std')" class="flex-1 bg-cyan-950/60 hover:bg-cyan-900/60 font-bold py-2 rounded-lg text-xs border border-cyan-700">
-                Standard (5 Cards)<br><span class="text-amber-300"><i class="fa-solid fa-coins mr-1"></i>500 Coins</span>
-              </button>
-              <button onclick="buyPack('cycle_super')" class="flex-1 bg-gradient-to-r from-cyan-600 to-blue-500 font-extrabold py-2 rounded-lg text-xs shadow-lg">
-                SUPER (1 R, 1 SR)<br><span class="text-white"><i class="fa-solid fa-gem mr-1"></i>300 Diamonds</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- APEX -->
-          <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center border border-amber-400">
-                <i class="fa-solid fa-crown text-2xl text-amber-500"></i>
+                <i class="fa-solid fa-bolt text-2xl text-amber-300"></i>
               </div>
               <div>
                 <div class="flex items-center gap-2"><h3 class="font-bold text-sm text-amber-200">Apex</h3><button onclick="showPackOdds('apex')" class="text-[10px] bg-slate-900 border border-amber-500 px-2 py-0.5 rounded-full text-amber-200 hover:text-white">Info</button></div>
@@ -943,7 +806,6 @@
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -1091,7 +953,8 @@
       "NUMBER5": { coins: 10000, description: "10,000 Free Coins" },
       "SHOHEI17": { diamonds: 1000, description: "1,000 Free Diamonds" },
       "TAHOE1": { diamonds: 1000, coins: 1000, description: "1,000 Diamonds + 1,000 Coins" },
-      "TB50": { diamonds: 1000, cardId: 903, description: "1,000 Diamonds + Mookie Betts That Ball's Gone" }
+      "TB50": { diamonds: 1000, cardId: 903, description: "1,000 Diamonds + Mookie Betts That Ball's Gone" },
+      "REFRESH": { refresh: true, description: "Refresh the game" }
     };
 
     const CARDS_CATALOG = {
@@ -1589,6 +1452,12 @@
       }
 
       const reward = CHEAT_CODES[codeInput];
+      if (reward.refresh) {
+        redeemedCodes.push(codeInput);
+        await saveUserData();
+        location.reload();
+        return;
+      }
       if (reward.coins) {
         userCoins += reward.coins;
       }
